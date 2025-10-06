@@ -11,9 +11,9 @@
                     <div class="row align-items-center product-detail-top">
                         <div class="col-md-5">
                             <div class="product-slider-single">
-                                <img src="img/product-1.png" alt="Product Image">
-                                <img src="img/product-2.png" alt="Product Image">
-                                <img src="img/product-3.png" alt="Product Image">
+                                <img src="img/product-1.jpg" alt="Product Image">
+                                <img src="img/product-1.jpg" alt="Product Image">
+                                <img src="img/product-1.jpg" alt="Product Image">
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -274,56 +274,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Sidebar -->
-                <div class="col-lg-3">
-                    <div class="sidebar-widget category">
-                        <h2 class="title">Category</h2>
-                        <ul>
-                            <li><a href="#">Lorem Ipsum</a><span>(83)</span></li>
-                            <li><a href="#">Cras sagittis</a><span>(198)</span></li>
-                            <li><a href="#">Vivamus</a><span>(95)</span></li>
-                            <li><a href="#">Fusce vitae</a><span>(48)</span></li>
-                            <li><a href="#">Vestibulum</a><span>(210)</span></li>
-                            <li><a href="#">Proin phar</a><span>(78)</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="sidebar-widget image">
-                        <h2 class="title">Featured Product</h2>
-                        <a href="#">
-                            <img src="img/category-1.jpg" alt="Image">
-                        </a>
-                    </div>
-
-                    <div class="sidebar-widget brands">
-                        <h2 class="title">Our Brands</h2>
-                        <ul>
-                            <li><a href="#">Nulla </a><span>(45)</span></li>
-                            <li><a href="#">Curabitur </a><span>(34)</span></li>
-                            <li><a href="#">Nunc </a><span>(67)</span></li>
-                            <li><a href="#">Ullamcorper</a><span>(74)</span></li>
-                            <li><a href="#">Fusce </a><span>(89)</span></li>
-                            <li><a href="#">Sagittis</a><span>(28)</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="sidebar-widget tag">
-                        <h2 class="title">Tags Cloud</h2>
-                        <a href="#">Lorem ipsum</a>
-                        <a href="#">Vivamus</a>
-                        <a href="#">Phasellus</a>
-                        <a href="#">pulvinar</a>
-                        <a href="#">Curabitur</a>
-                        <a href="#">Fusce</a>
-                        <a href="#">Sem quis</a>
-                        <a href="#">Mollis metus</a>
-                        <a href="#">Sit amet</a>
-                        <a href="#">Vel posuere</a>
-                        <a href="#">orci luctus</a>
-                        <a href="#">Nam lorem</a>
                     </div>
                 </div>
             </div>
