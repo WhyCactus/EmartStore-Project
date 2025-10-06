@@ -5,6 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('order_shipping', function (Blueprint $table) {
@@ -19,11 +22,12 @@ return new class extends Migration {
             $table->text('delivery_notes')->nullable();
             $table->text('failed_reason')->nullable();
             $table->timestamps();
-
-            $table->index(['order_id', 'tracking_number', 'delivery_status']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('order_shipping');

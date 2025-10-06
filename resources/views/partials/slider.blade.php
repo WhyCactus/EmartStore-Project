@@ -7,7 +7,7 @@
             <a href="/product-list" class="banner-btn">Shop Now</a>
         </div>
         <div class="banner-image">
-            <img src="img/slider-1.jpg" alt="Banner Image" />
+            <img src="img/banner-1.jpg" alt="Banner Image" />
         </div>
     </div>
 </div>

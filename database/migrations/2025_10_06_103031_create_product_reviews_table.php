@@ -5,6 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('product_reviews', function (Blueprint $table) {
@@ -17,11 +20,12 @@ return new class extends Migration {
             $table->json('images')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
-
-            $table->index(['user_id', 'product_id', 'order_detail_id', 'rating', 'status']);
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('product_reviews');

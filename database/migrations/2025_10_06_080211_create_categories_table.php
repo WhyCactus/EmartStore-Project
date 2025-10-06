@@ -12,10 +12,8 @@ return new class extends Migration {
             $table->string('category_name');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('description')->nullable();
-            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->timestamps();
-
-            $table->index(['parent_id', 'status']);
+            $table->index(['status']);
         });
     }
 
