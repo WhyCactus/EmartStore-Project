@@ -637,7 +637,7 @@ button.btn {
 }
 
 .product-item .product-content .price {
-    font-size: 30px;
+    font-size: 25px;
     color: #3F69AA;
     font-weight: 700;
 }
@@ -673,7 +673,6 @@ button.btn {
     position: relative;
     padding: 60px 0;
 }
-
 
 /**********************************/
 /******** Product View CSS ********/
@@ -766,8 +765,6 @@ button.btn {
     color: #ffffff;
     background: #3F69AA;
 }
-
-
 
 /**********************************/
 /******* Product Detail CSS *******/
@@ -983,8 +980,6 @@ button.btn {
     background: #3F69AA;
 }
 
-
-
 /**********************************/
 /********** Sidebar CSS ***********/
 /**********************************/
@@ -1099,8 +1094,6 @@ button.btn {
     color: #ffffff;
     background: #3F69AA;
 }
-
-
 
 /**********************************/
 /************ Cart CSS ************/
@@ -1236,8 +1229,6 @@ button.btn {
     border: 1px solid #3F69AA;
 }
 
-
-
 /**********************************/
 /********** Checkout CSS **********/
 /**********************************/
@@ -1338,8 +1329,6 @@ button.btn {
     border: none;
 }
 
-
-
 /**********************************/
 /********* My Account CSS *********/
 /**********************************/
@@ -1423,118 +1412,6 @@ button.btn {
     max-width: 100%;
     margin: auto;
 }
-
-
-
-/**********************************/
-/********** Contact CSS ***********/
-/**********************************/
-.contact {
-    position: relative;
-    padding: 60px 0;
-}
-
-.contact .contact-info .section-header h3,
-.contact .contact-info .section-header p {
-    text-align: left;
-}
-
-.contact .contact-info .section-header p {
-    font-weight: 400;
-}
-
-.contact .contact-info .section-header h3::after {
-    left: 0;
-}
-
-.contact .contact-info img {
-    max-width: 100%;
-    margin-bottom: 15px;
-}
-
-.contact .contact-info h4 {
-    margin-bottom: 10px;
-    color: #666666;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.contact .contact-info h4 i {
-    color: #3F69AA;
-    margin-right: 5px;
-}
-
-.contact .social {
-    position: relative;
-    width: 100%;
-}
-
-.contact .social a {
-    display: inline-block;
-    margin: 10px 10px 0 0;
-    width: 40px;
-    height: 40px;
-    padding: 3px 0;
-    text-align: center;
-    font-size: 20px;
-    border: 1px solid #3F69AA;
-}
-
-.contact .social a i {
-    color: #3F69AA;
-}
-
-.contact .social a:hover {
-    background: #3F69AA;
-}
-
-.contact .social a:hover i {
-    color: #ffffff;
-}
-
-.contact .form {
-    color: #666666;
-}
-
-@media (max-width: 767.98px) {
-    .contact .form {
-        margin-bottom: 30px;
-    }
-}
-
-.contact .form input,
-.contact .form textarea {
-    color: #666666;
-    font-size: 16px;
-    padding: 10px 15px;
-    border: none;
-    border: 1px solid #3F69AA;
-    border-radius: 0;
-    box-shadow: none;
-}
-
-.contact .form input:focus,
-.contact .form textarea:focus {
-    box-shadow: none;
-}
-
-.contact .form button[type="submit"] {
-    padding: 6px 25px 7px 25px;
-    color: #3F69AA;
-    letter-spacing: 1px;
-    transition: 0.3s;
-    cursor: pointer;
-    border-radius: 0;
-    border: 1px solid #3F69AA;
-    background: #ffffff;
-}
-
-.contact .form button[type="submit"]:hover {
-    background: #3F69AA;
-    color: #FFFFFF;
-}
-
-
 
 /**********************************/
 /****** Register & Login CSS ******/
@@ -1833,4 +1710,27 @@ button.btn {
         padding: 12px 25px;
         font-size: 1rem;
     }
+}
+
+.product-date {
+    font-size: 0.8rem;
+}
+
+.product-action {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.product-action .btn-link {
+    flex-shrink: 0 !important;
+    width: 35px !important;
+    height: 35px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.product-action .btn-link:hover i {
+    color: #007bff !important;
 }

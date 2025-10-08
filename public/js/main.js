@@ -28,7 +28,7 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
 
@@ -178,7 +178,7 @@
 
     // Shipping address show hide
     $('.checkout #shipto').change(function () {
-        if($(this).is(':checked')) {
+        if ($(this).is(':checked')) {
             $('.checkout .shipping-address').slideDown();
         } else {
             $('.checkout .shipping-address').slideUp();
@@ -196,3 +196,22 @@
     });
 })(jQuery);
 
+// Rating stars
+document.querySelectorAll('.rating-star').forEach(star => {
+    star.addEventListener('click', function () {
+        const rating = this.getAttribute('data-rating');
+        document.getElementById('rating-value').value = rating;
+
+        // Update star display
+        document.querySelectorAll('.rating-star').forEach(s => {
+            const starRating = s.getAttribute('data-rating');
+            if (starRating <= rating) {
+                s.classList.remove('fa-star-o');
+                s.classList.add('fa-star');
+            } else {
+                s.classList.remove('fa-star');
+                s.classList.add('fa-star-o');
+            }
+        });
+    });
+});

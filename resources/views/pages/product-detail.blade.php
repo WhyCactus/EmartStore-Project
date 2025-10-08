@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Product Detail - E Shop')
+@section('title', 'Product - E Shop')
 
 @section('content')
     <!-- Product Detail Start -->
@@ -11,45 +11,66 @@
                     <div class="row align-items-center product-detail-top">
                         <div class="col-md-5">
                             <div class="product-slider-single">
-                                <img src="img/product-1.jpg" alt="Product Image">
-                                <img src="img/product-1.jpg" alt="Product Image">
-                                <img src="img/product-1.jpg" alt="Product Image">
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->product_name }}">
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="product-content">
                                 <div class="title">
-                                    <h2>Phasellus Gravida</h2>
+                                    <h2>{{ $product->product_name }}</h2>
                                 </div>
                                 <div class="ratting">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i class="fa fa-star{{ $i <= $product->average_rating ? '' : '-o' }}"></i>
+                                    @endfor
+                                    <span class="ml-2">({{ $product->rating_count }} reviews)</span>
                                 </div>
-                                <div class="price">$22 <span>$25</span></div>
-                                <div class="details">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi
-                                        viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus
-                                        tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante
-                                        suscipit non.
-                                    </p>
+                                <div class="price">
+                                    @if ($product->discounted_price && $product->discounted_price < $product->original_price)
+                                        ${{ number_format($product->discounted_price, 2) }}
+                                        <span>${{ number_format($product->original_price, 2) }}</span>
+                                    @else
+                                        ${{ number_format($product->original_price, 2) }}
+                                    @endif
                                 </div>
-
                                 <div class="quantity">
                                     <h4>Quantity:</h4>
                                     <div class="qty">
-                                        <button class="btn-minus"><i class="fa fa-minus"></i></button>
-                                        <input type="text" value="1">
-                                        <button class="btn-plus"><i class="fa fa-plus"></i></button>
+                                        <button class="btn-minus" type="button"><i class="fa fa-minus"></i></button>
+                                        <input type="text" value="1" id="quantity">
+                                        <button class="btn-plus" type="button"><i class="fa fa-plus"></i></button>
                                     </div>
                                 </div>
-                                <div class="action">
-                                    <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                    <a href="#"><i class="fa fa-heart"></i></a>
-                                    <a href="#"><i class="fa fa-search"></i></a>
+
+                                @if ($product->quantity_in_stock > 0)
+                                    <div class="action">
+                                        <form action="#" method="POST" class="d-inline">
+                                            @csrf
+                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" name="quantity" value="1" id="quantity-input">
+                                            <button type="submit" class="btn btn-link">
+                                                <i class="fa fa-cart-plus"></i> Add to Cart
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="alert alert-warning mt-3">
+                                        <i class="fa fa-exclamation-triangle"></i> Out of Stock
+                                    </div>
+                                @endif
+
+                                <div class="product-meta mt-3">
+                                    <p><strong>SKU:</strong> {{ $product->product_code }}</p>
+                                    <p><strong>Category:</strong> {{ $product->category->category_name ?? 'N/A' }}</p>
+                                    <p><strong>Brand:</strong> {{ $product->brand->brand_name ?? 'N/A' }}</p>
+                                    <p><strong>Availability:</strong>
+                                        @if ($product->quantity_in_stock > 0)
+                                            <span class="text-success">In Stock ({{ $product->quantity_in_stock }}
+                                                available)</span>
+                                        @else
+                                            <span class="text-danger">Out of Stock</span>
+                                        @endif
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -65,216 +86,144 @@
                                     <a class="nav-link" data-toggle="pill" href="#specification">Specification</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="#reviews">Reviews (1)</a>
+                                    <a class="nav-link" data-toggle="pill" href="#reviews">Reviews
+                                        ({{ $product->reviews_count ?? 0 }})</a>
                                 </li>
                             </ul>
 
                             <div class="tab-content">
                                 <div id="description" class="container tab-pane active"><br>
                                     <h4>Product description</h4>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum quam ac mi
-                                        viverra dictum. In efficitur ipsum diam, at dignissim lorem tempor in. Vivamus
-                                        tempor hendrerit finibus. Nulla tristique viverra nisl, sit amet bibendum ante
-                                        suscipit non. Praesent in faucibus tellus, sed gravida lacus. Vivamus eu diam eros.
-                                        Aliquam et sapien eget arcu rhoncus scelerisque. Suspendisse sit amet neque neque.
-                                        Praesent suscipit et magna eu iaculis. Donec arcu libero, commodo ac est a,
-                                        malesuada finibus dolor. Aenean in ex eu velit semper fermentum. In leo dui, aliquet
-                                        sit amet eleifend sit amet, varius in turpis. Maecenas fermentum ut ligula at
-                                        consectetur. Nullam et tortor leo.
-                                    </p>
+                                    <p>{{ $product->description }}</p>
                                 </div>
                                 <div id="specification" class="container tab-pane fade"><br>
                                     <h4>Product specification</h4>
                                     <ul>
-                                        <li>Lorem ipsum dolor sit amet</li>
-                                        <li>Lorem ipsum dolor sit amet</li>
-                                        <li>Lorem ipsum dolor sit amet</li>
-                                        <li>Lorem ipsum dolor sit amet</li>
-                                        <li>Lorem ipsum dolor sit amet</li>
+                                        <li><strong>Brand:</strong> {{ $product->brand->brand_name ?? 'N/A' }}</li>
+                                        <li><strong>Model:</strong> {{ $product->product_name }}</li>
+                                        <li><strong>SKU:</strong> {{ $product->product_code }}</li>
+                                        <li>
+                                            <strong>Category:</strong> {{ $product->category->category_name ?? 'N/A' }}
+                                        </li>
+                                        <li>
+                                            <strong>Availability:</strong>
+                                            @if ($product->quantity_in_stock > 0)
+                                                In Stock
+                                            @else
+                                                Out of Stock
+                                            @endif
+                                        </li>
                                     </ul>
                                 </div>
                                 <div id="reviews" class="container tab-pane fade"><br>
-                                    <div class="reviews-submitted">
-                                        <div class="reviewer">Phasellus Gravida - <span>01 Jan 2020</span></div>
-                                        <div class="ratting">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
+                                    @if ($product->reviews && $product->reviews->count() > 0)
+                                        @foreach ($product->reviews as $review)
+                                            <div class="reviews-submitted">
+                                                <div class="reviewer">{{ $review->user->name ?? 'Anonymous' }} -
+                                                    <span>{{ $review->created_at->format('d M Y') }}</span>
+                                                </div>
+                                                <div class="ratting">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <i class="fa fa-star{{ $i <= $review->rating ? '' : '-o' }}"></i>
+                                                    @endfor
+                                                </div>
+                                                <p>{{ $review->comment }}</p>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <p>No reviews yet. Be the first to review this product!</p>
+                                    @endif
+
+                                    @auth
+                                        <div class="reviews-submit">
+                                            <h4>Give your Review:</h4>
+                                            <form action="" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <div class="ratting mb-3">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <i class="fa fa-star-o rating-star"
+                                                            data-rating="{{ $i }}"></i>
+                                                    @endfor
+                                                    <input type="hidden" name="rating" id="rating-value" value="5">
+                                                </div>
+                                                <div class="row form">
+                                                    <div class="col-sm-12">
+                                                        <textarea name="comment" placeholder="Your review" required></textarea>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <p>
-                                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                                            doloremque laudantium, totam rem aperiam.
-                                        </p>
-                                    </div>
-                                    <div class="reviews-submit">
-                                        <h4>Give your Review:</h4>
-                                        <div class="ratting">
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
-                                            <i class="fa fa-star-o"></i>
+                                    @else
+                                        <div class="alert alert-info">
+                                            Please <a href="#">login</a> to submit a review.
                                         </div>
-                                        <div class="row form">
-                                            <div class="col-sm-6">
-                                                <input type="text" placeholder="Name">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <input type="email" placeholder="Email">
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <textarea placeholder="Review"></textarea>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <button>Submit</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    @endauth
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="container">
-                        <div class="section-header">
-                            <h3>Related Products</h3>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec viverra at massa sit amet
-                                ultricies. Nullam consequat, mauris non interdum cursus
-                            </p>
-                        </div>
-                    </div>
+                    @if ($relatedProducts->count() > 0)
+                        <div class="related-products">
+                            <div class="container">
+                                <div class="section-header">
+                                    <h3>Related Products</h3>
+                                </div>
+                            </div>
 
-                    <div class="row align-items-center product-slider product-slider-3">
-                        <div class="col-lg-3">
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-1.png" alt="Product Image">
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content">
-                                    <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="price">$22 <span>$25</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-2.png" alt="Product Image">
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content">
-                                    <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="price">$22 <span>$25</span></div>
+                            <div class="container">
+                                <div class="row product-slider-3">
+                                    @foreach ($relatedProducts as $relatedProduct)
+                                        <div class="col-lg-3 col-md-4 col-sm-6">
+                                            <div class="product-item">
+                                                <div class="product-image">
+                                                    <img src="{{ asset('storage/' . $relatedProduct->image) }}"
+                                                        alt="{{ $relatedProduct->product_name }}">
+                                                    <div class="product-action">
+                                                        <form action="#" method="POST" class="d-inline">
+                                                            @csrf
+                                                            <input type="hidden" name="product_id"
+                                                                value="{{ $relatedProduct->id }}">
+                                                            <input type="hidden" name="quantity" value="1">
+                                                            <button type="submit" class="btn btn-link">
+                                                                <i class="fa fa-cart-plus"></i>
+                                                            </button>
+                                                        </form>
+                                                        <a href="{{ route('product.show', $relatedProduct->id) }}"
+                                                            class="btn btn-link">
+                                                            <i class="fa fa-search"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-content">
+                                                    <div class="product-brand text-muted small mb-1">
+                                                        {{ $relatedProduct->brand->brand_name ?? 'Unknown Brand' }}
+                                                    </div>
+                                                    <div class="title">
+                                                        <a href="{{ route('product.show', $relatedProduct->id) }}">
+                                                            {{ $relatedProduct->product_name }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="price">
+                                                        @if ($relatedProduct->discounted_price && $relatedProduct->discounted_price < $relatedProduct->original_price)
+                                                            ${{ number_format($relatedProduct->discounted_price, 2) }}
+                                                            <span>${{ number_format($relatedProduct->original_price, 2) }}</span>
+                                                        @else
+                                                            ${{ number_format($relatedProduct->original_price, 2) }}
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-3.png" alt="Product Image">
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content">
-                                    <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="price">$22 <span>$25</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-4.png" alt="Product Image">
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content">
-                                    <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="price">$22 <span>$25</span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="product-item">
-                                <div class="product-image">
-                                    <a href="product-detail.html">
-                                        <img src="img/product-5.png" alt="Product Image">
-                                    </a>
-                                    <div class="product-action">
-                                        <a href="#"><i class="fa fa-cart-plus"></i></a>
-                                        <a href="#"><i class="fa fa-heart"></i></a>
-                                        <a href="#"><i class="fa fa-search"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-content">
-                                    <div class="title"><a href="#">Phasellus Gravida</a></div>
-                                    <div class="ratting">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="price">$22 <span>$25</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>

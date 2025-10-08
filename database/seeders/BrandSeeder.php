@@ -15,18 +15,21 @@ class BrandSeeder extends Seeder
     {
         $brands = [
             [
+                'id' => 1,
                 'brand_name' => 'Apple',
                 'status' => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
+                'id' => 2,
                 'brand_name' => 'Samsung',
                 'status' => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
+                'id' => 3,
                 'brand_name' => 'Xiaomi',
                 'status' => 'active',
                 'created_at' => now(),

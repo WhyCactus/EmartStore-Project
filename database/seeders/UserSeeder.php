@@ -14,7 +14,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
+        DB::table('users')->delete();
+
+        $users = [
             [
                 'username' => 'admin',
                 'email' => 'admin@emart.com',
@@ -53,6 +55,6 @@ class UserSeeder extends Seeder
             ],
         ];
 
-        DB::table('users')->insert($categories);
+        DB::table('users')->insert($users);
     }
 }

@@ -4,128 +4,66 @@
         <div class="section-header">
             <h3>Featured Product</h3>
         </div>
-        <div class="row align-items-center product-slider product-slider-4">
-            <div class="col-lg-3">
-                <div class="product-item">
-                    <div class="product-image">
-                        <a href="product-detail.html">
-                            <img src="img/product-1.jpg" alt="Product Image">
-                        </a>
-                        <div class="product-action">
-                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#"><i class="fa fa-search"></i></a>
+
+        @if ($featuredProducts->count() > 0)
+            <div class="row align-items-center product-slider product-slider-4">
+                @foreach ($featuredProducts as $product)
+                    <div class="col-lg-3">
+                        <div class="product-item">
+                            <div class="product-image">
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->product_name }}"
+                                    class="img-fluid">
+                                <div class="product-action">
+                                    <form action="#" method="POST" class="d-inline">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="btn btn-link">
+                                            <i class="fa fa-cart-plus"></i>
+                                        </button>
+                                    </form>
+                                    <a href="{{ route('product.show', $product->id) }}">
+                                        <i class="fa fa-search"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <div class="product-brand text-muted small mb-1">
+                                    {{ $product->brand->brand_name ?? 'Unknown Brand' }}
+                                </div>
+                                <div class="title">
+                                    <a href="{{ route('product.show', $product->id) }}">
+                                        {{ $product->product_name }}
+                                    </a>
+                                </div>
+                                <div class="price">
+                                    @if ($product->discounted_price && $product->discounted_price < $product->original_price)
+                                        ${{ number_format($product->discounted_price, 2) }}
+                                        <span>${{ number_format($product->original_price, 2) }}</span>
+                                    @else
+                                        ${{ number_format($product->original_price, 2) }}
+                                    @endif
+                                </div>
+
+                                @if ($product->quantity_in_stock <= 5 && $product->quantity_in_stock > 0)
+                                    <div class="stock-warning text-warning small">
+                                        Only {{ $product->quantity_in_stock }} left!
+                                    </div>
+                                @elseif($product->quantity_in_stock == 0)
+                                    <div class="stock-warning text-danger small">
+                                        Out of Stock
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
-                    <div class="product-content">
-                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                        <div class="ratting">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="price">$22 <span>$25</span></div>
-                    </div>
-                </div>
+                @endforeach
             </div>
-            <div class="col-lg-3">
-                <div class="product-item">
-                    <div class="product-image">
-                        <a href="product-detail.html">
-                            <img src="img/product-1.jpg" alt="Product Image">
-                        </a>
-                        <div class="product-action">
-                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                        <div class="ratting">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="price">$22 <span>$25</span></div>
-                    </div>
-                </div>
+        @else
+            <div class="text-center py-4">
+                <p class="text-muted">No featured products available at the moment.</p>
             </div>
-            <div class="col-lg-3">
-                <div class="product-item">
-                    <div class="product-image">
-                        <a href="product-detail.html">
-                            <img src="img/product-1.jpg" alt="Product Image">
-                        </a>
-                        <div class="product-action">
-                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                        <div class="ratting">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="price">$22 <span>$25</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="product-item">
-                    <div class="product-image">
-                        <a href="product-detail.html">
-                            <img src="img/product-1.jpg" alt="Product Image">
-                        </a>
-                        <div class="product-action">
-                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                        <div class="ratting">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="price">$22 <span>$25</span></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="product-item">
-                    <div class="product-image">
-                        <a href="product-detail.html">
-                            <img src="img/product-1.jpg" alt="Product Image">
-                        </a>
-                        <div class="product-action">
-                            <a href="#"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-content">
-                        <div class="title"><a href="#">Phasellus Gravida</a></div>
-                        <div class="ratting">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="price">$22 <span>$25</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endif
     </div>
 </div>
 <!-- Featured Product End -->

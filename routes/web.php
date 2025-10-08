@@ -1,11 +1,10 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home.index');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -15,14 +14,10 @@ Route::get('/my-account', function () {
     return view('pages.my-account');
 });
 
-Route::get('/product-list', function () {
-    return view('pages.product-list');
-});
-
-Route::get('/product-detail', function () {
-    return view('pages.product-detail');
-});
-
+Route::get('/product-list', [HomeController::class, 'list'])->name('product.list');
+Route::get('/product-list/category/{id}', [HomeController::class, 'getProductByCategory'])->name('product.category');
+Route::get('/product-list/brand/{id}', [HomeController::class, 'getProductByBrand'])->name('product.brand');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/cart', function () {
     return view('pages.cart');
 });

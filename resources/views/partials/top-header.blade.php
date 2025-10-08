@@ -4,8 +4,8 @@
         <div class="row align-items-center">
             <div class="col-md-3">
                 <div class="logo">
-                    <a href="/">
-                        <img src="img/logo.png" alt="Logo">
+                    <a href="{{ route('home') }}">
+                        <img src="{{ asset('img/logo.png') }}" alt="Logo">
                     </a>
                 </div>
             </div>
