@@ -15,8 +15,6 @@
                         <div class="dropdown-menu">
                             <a href="/cart" class="dropdown-item">Cart</a>
                             <a href="/checkout" class="dropdown-item">Checkout</a>
-                            <a href="/login" class="dropdown-item">Login & Register</a>
-                            <a href="/my-account" class="dropdown-item">My Account</a>
                         </div>
                     </div>
                 </div>

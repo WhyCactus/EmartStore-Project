@@ -18,11 +18,23 @@
             <div class="col-md-3">
                 <div class="user">
                     <div class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account</a>
-                        <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item">Login</a>
-                            <a href="#" class="dropdown-item">Register</a>
-                        </div>
+                        @auth()
+                            <a href="#" class="dropdown-toggle"
+                                data-toggle="dropdown">{{ Auth::user()->username }}</a>
+                            <div class="dropdown-menu">
+                                <a href="{{ route('my-account') }}" class="dropdown-item">My Account</a>
+                                @if (Auth::user()->role_id == 1)
+                                    <a href="#" class="dropdown-item">Dashboard</a>
+                                @endif
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Logout</button>
+                                </form>
+                            </div>
+                        @else
+                            <a href="{{ route('login') }}">Login</a>
+                        @endauth
+
                     </div>
                     <div class="cart">
                         <i class="fa fa-cart-plus"></i>

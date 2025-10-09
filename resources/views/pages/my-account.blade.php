@@ -18,7 +18,11 @@
                             role="tab">address</a>
                         <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab">Account
                             Details</a>
-                        <a class="nav-link" href="index.html">Logout</a>
+                        <a class="nav-link" href="#"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form action="{{ route('logout') }}" method="post" id="logout-form" class="d-none">
+                            @csrf
+                        </form>
                     </div>
                 </div>
                 <div class="col-md-9">

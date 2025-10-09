@@ -12,9 +12,7 @@ return new class extends Migration {
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('full_name');
             $table->string('phone', 20)->nullable();
-            $table->string('avatar', 500)->nullable();
             $table->enum('status', ['active', 'inactive', 'banned'])->default('active');
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->timestamp('email_verified_at')->nullable();

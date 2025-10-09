@@ -22,7 +22,7 @@
                                             <i class="fa fa-cart-plus"></i>
                                         </button>
                                     </form>
-                                    <a href="#">
+                                    <a href="{{ route('product.show', $product->id) }}">
                                         <i class="fa fa-search"></i>
                                     </a>
                                 </div>
@@ -32,7 +32,7 @@
                                     {{ $product->brand->brand_name ?? 'Unknown Brand' }}
                                 </div>
                                 <div class="title">
-                                    <a href="#">
+                                    <a href="{{ route('product.show', $product->id) }}">
                                         {{ $product->product_name }}
                                     </a>
                                 </div>
