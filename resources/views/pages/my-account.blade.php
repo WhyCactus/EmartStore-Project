@@ -110,11 +110,8 @@
                         <div class="tab-pane fade" id="account-tab" role="tabpanel" aria-labelledby="account-nav">
                             <h4>Account Details</h4>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <input type="text" placeholder="First Name">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" placeholder="Last Name">
+                                <div class="col-md-12">
+                                    <input type="text" placeholder="Username">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" placeholder="Mobile">

@@ -29,7 +29,7 @@
                                     <button class="btn" type="submit">Login</button>
                                 </div>
                                 <div class="col-md-12 mt-3">
-                                    <a href="#">Forgot Password?</a>
+                                    <a href="{{ route('password.request') }}">Forgot Password?</a>
                                 </div>
                             </div>
                         </form>
