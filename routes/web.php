@@ -27,6 +27,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('regular.user')->group(function () {
     Route::get('/my-account', [UserController::class, 'index'])->name('my-account');
+    Route::post('update-account', [UserController::class, 'updateAccount'])->name('update-account');
+    Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password');
 
     Route::get('/cart', function () {
         return view('pages.cart');
