@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\AdminBrandController;
+use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminProductController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
@@ -40,17 +44,14 @@ Route::middleware('regular.user')->group(function () {
 
 
 Route::middleware(['auth', 'role'])->group(function () {
-    Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', function () {
             return view('admin.pages.dashboard');
         })->name('admin.dashboard');
 
-        Route::get('/charts', function () {
-            return view('admin.pages.charts');
-        })->name('admin.charts');
-
-        Route::get('/tables', function () {
-            return view('admin.pages.tables');
-        })->name('admin.tables');
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users');
+        Route::get('/products', [AdminProductController::class, 'index'])->name('products');
+        Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories');
+        Route::get('/brands', [AdminBrandController::class, 'index'])->name('brands');
     });
 });

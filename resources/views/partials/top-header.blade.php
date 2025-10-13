@@ -24,7 +24,7 @@
                             <div class="dropdown-menu">
                                 <a href="{{ route('my-account') }}" class="dropdown-item">My Account</a>
                                 @if (Auth::user()->role_id == 1)
-                                    <a href="#" class="dropdown-item">Dashboard</a>
+                                    <a href="/admin/dashboard" class="dropdown-item">Dashboard</a>
                                 @endif
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
