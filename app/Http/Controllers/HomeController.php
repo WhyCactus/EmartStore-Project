@@ -12,6 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::withCount('products')
+            ->limit(6)
             ->get();
 
         $featuredProducts = Product::with('brand', 'category')

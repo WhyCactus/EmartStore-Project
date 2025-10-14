@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Category List - Emart Admin')
+@section('title', 'Brand List - Emart Admin')
 
 @section('content')
     <main>
@@ -11,9 +11,15 @@
                 <li class="breadcrumb-item active">Brands</li>
             </ol>
             <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Brands
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-table me-1"></i>
+                        Brands
+                    </div>
+                    <a href="{{ route('admin.create-brand') }}" class="btn btn-primary text-end">
+                        <i class="bi bi-plus-circle"></i>
+                        Create Brand
+                    </a>
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple">
@@ -38,9 +44,15 @@
                                         <a href="#" class="btn btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger">
-                                            <i class="bi bi-dash-circle"></i>
-                                        </a>
+                                        <form action="{{ route('admin.toggle-brand-status', $brand->id) }}" method="POST">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit"
+                                                class="btn btn-sm {{ $brand->status ? 'btn-success' : 'btn-secondary' }}">
+                                                <i class="fas {{ $brand->status ? 'bi bi-plus-circle' : 'bi bi-dash-circle' }}"></i>
+                                                {{ $brand->status ? 'Active' : 'Inactive' }}
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

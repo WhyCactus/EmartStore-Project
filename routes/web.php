@@ -52,6 +52,11 @@ Route::middleware(['auth', 'role'])->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users');
         Route::get('/products', [AdminProductController::class, 'index'])->name('products');
         Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories');
+        Route::get('/create-category', [AdminCategoryController::class, 'create'])->name('create-category');
+        Route::post('/create-category', [AdminCategoryController::class, 'store'])->name('store-category');
         Route::get('/brands', [AdminBrandController::class, 'index'])->name('brands');
+        Route::get('/create-brand', [AdminBrandController::class, 'create'])->name('create-brand');
+        Route::post('/create-brand', [AdminBrandController::class, 'store'])->name('store-brand');
+        Route::patch('/brands/{id}/toggle-status', [AdminBrandController::class, 'toggleStatus'])->name('toggle-brand-status');
     });
 });

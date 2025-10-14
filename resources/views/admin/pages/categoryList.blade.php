@@ -11,9 +11,15 @@
                 <li class="breadcrumb-item active">Categories</li>
             </ol>
             <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Categories
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-table me-1"></i>
+                        Categories
+                    </div>
+                    <a href="{{ route('admin.create-category') }}" class="btn btn-primary text-end">
+                        <i class="bi bi-plus-circle"></i>
+                        Create Category
+                    </a>
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple">
