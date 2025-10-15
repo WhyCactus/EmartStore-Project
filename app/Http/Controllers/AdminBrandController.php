@@ -34,6 +34,30 @@ class AdminBrandController extends Controller
         return redirect()->route('admin.brands')->with('success', 'Add brand successfully!');
     }
 
+    public function edit($id)
+    {
+        $brands = Brand::all()->find($id);
+
+        return view('admin.pages.editBrand', compact('brands'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'brand_name' => 'required',
+            'status' => 'required',
+        ]);
+
+        $brands = Brand::findOrFail($id);
+
+        $brands->update([
+            'brand_name' => $request->brand_name,
+            'status' => $request->status
+        ]);
+
+        return redirect()->route('admin.brands')->with('success', 'Update brand successfully!');
+    }
+
     public function toggleStatus(Brand $brand)
     {
         $brand->status = !$brand->status;

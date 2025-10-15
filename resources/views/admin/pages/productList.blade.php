@@ -11,9 +11,15 @@
                 <li class="breadcrumb-item active">Products</li>
             </ol>
             <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Products
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-table me-1"></i>
+                        Products
+                    </div>
+                    <a href="{{ route('admin.create-product') }}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+                        New Product
+                    </a>
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple">
@@ -27,6 +33,7 @@
                                 <th>Category</th>
                                 <th>Brands</th>
                                 <th>Quantity</th>
+                                <th>Sold Count</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -53,12 +60,13 @@
                                     <td>{{ $product->category->category_name }}</td>
                                     <td>{{ $product->brand->brand_name }}</td>
                                     <td>{{ $product->quantity_in_stock }}</td>
+                                    <td>{{ $product->sold_count }}</td>
                                     <td>{{ $product->status }}</td>
                                     <td>
                                         <a href="#" class="btn btn-primary">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a href="#" class="btn btn-warning">
+                                        <a href="{{ route('admin.edit-product', $product->id) }}" class="btn btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger">
@@ -74,7 +82,3 @@
         </div>
     </main>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
-@endpush

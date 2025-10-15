@@ -43,14 +43,8 @@
                                     </td>
                                     <td>{{ $category->status }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-primary">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-warning">
+                                        <a href="{{ route('admin.edit-category', $category->id) }}" class="btn btn-warning">
                                             <i class="bi bi-pencil-square"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-danger">
-                                            <i class="bi bi-dash-circle"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -62,7 +56,3 @@
         </div>
     </main>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
-@endpush

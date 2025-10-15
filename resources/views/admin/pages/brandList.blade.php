@@ -38,21 +38,9 @@
                                     <td>{{ $brand->brand_name }}</td>
                                     <td>{{ $brand->status }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-primary">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-warning">
+                                        <a href="{{ route('admin.edit-brand', $brand->id) }}" class="btn btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <form action="{{ route('admin.toggle-brand-status', $brand->id) }}" method="POST">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit"
-                                                class="btn btn-sm {{ $brand->status ? 'btn-success' : 'btn-secondary' }}">
-                                                <i class="fas {{ $brand->status ? 'bi bi-plus-circle' : 'bi bi-dash-circle' }}"></i>
-                                                {{ $brand->status ? 'Active' : 'Inactive' }}
-                                            </button>
-                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -63,7 +51,3 @@
         </div>
     </main>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
-@endpush

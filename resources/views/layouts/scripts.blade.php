@@ -6,3 +6,11 @@
 
 <!-- Template Javascript -->
 <script src="{{ asset('../js/main.js') }}"></script>
+
+<script src="{{ asset('js/alert.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    window.successMessage = @json(Session::get('success'));
+    window.errorMessage = @json(Session::get('error'));
+    window.validationErrors = @json($errors->all());
+</script>
