@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\UserService;
 
 class AdminUserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index()
     {
-        $users = User::with('role')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        return view('admin.pages.userList', compact('users'));
+        try {
+            $users = $this->userService->getAllUsers();
+            return view('admin.pages.userList', compact('users'));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error loading users: ' . $e->getMessage());
+        }
     }
 }

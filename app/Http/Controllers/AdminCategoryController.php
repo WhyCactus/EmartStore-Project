@@ -2,88 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Http\Requests\CategoryRequest;
 
 class AdminCategoryController extends Controller
 {
+    protected $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     public function index()
     {
-        $categories = Category::all();
-
-        return view('admin.pages.categoryList', compact('categories'));
+        try {
+            $categories = $this->categoryService->getAllCategories();
+            return view('admin.pages.categoryList', compact('categories'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error loading categories: ' . $e->getMessage());
+        }
     }
 
     public function create()
     {
-        $categories = Category::all();
-
-        return view('admin.pages.newCategory', compact('categories'));
+        try {
+            $categories = $this->categoryService->getAllCategories();
+            return view('admin.pages.newCategory', compact('categories'));
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error loading form: ' . $e->getMessage());
+        }
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ],[
-            'category_name.required' => 'Category name is required',
-            'category_name.string' => 'Category name must be a string',
-            'category_name.max' => 'Category name must not exceed 255 characters',
-            'image.image' => 'Image must be an image file',
-            'image.mimes' => 'Image must be a JPEG, PNG, JPG, or GIF file',
-            'image.max' => 'Image size must not exceed 2MB',
-        ]);
+        try {
+            $data = $request->validated();
 
-        $data = [
-            'category_name' => $request->category_name,
-            'status' => 'active',
-        ];
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image');
+            }
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-            $data['image'] = $imagePath;
+            $this->categoryService->createCategory($data);
+            return redirect()->route('admin.categories')->with('success', 'Category added successfully!');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error creating category: ' . $e->getMessage())
+                ->withInput();
         }
-
-        Category::create($data);
-
-        return redirect()->route('admin.categories')->with('success', 'Add category successfully!');
     }
 
     public function edit($id)
     {
-        $category = Category::all()->find($id);
-
-        return view('admin.pages.editCategory', compact('category'));
+        try {
+            $category = $this->categoryService->getCategoryById($id);
+            return view('admin.pages.editCategory', compact('category'));
+        } catch (\Exception $e) {
+            return redirect()->route('admin.categories')->with('error', 'Category not found!');
+        }
     }
 
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        $request->validate([
-            'category_name' => 'required|string|max:255',
-            'image' => 'nullable|image|max:2048',
-        ],[
-            'category_name.required' => 'Category name is required',
-            'category_name.string' => 'Category name must be a string',
-            'category_name.max' => 'Category name must not exceed 255 characters',
-            'image.image' => 'Image must be an image file',
-            'image.max' => 'Image size must not exceed 2MB',
-        ]);
+        try {
+            $data = $request->validated();
 
-        $category = Category::findOrFail($id);
+            if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                $data['image'] = $request->file('image');
+            }
 
-        $data = [
-            'category_name' => $request->category_name,
-            'status' => 'active',
-        ];
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('categories', 'public');
-            $data['image'] = $imagePath;
+            $this->categoryService->updateCategory($id, $data);
+            return redirect()->route('admin.categories')->with('success', 'Category updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error updating category: ' . $e->getMessage())
+                ->withInput();
         }
-
-        $category->update($data);
-
-        return redirect()->route('admin.categories')->with('success', 'Update category successfully!');
     }
 }

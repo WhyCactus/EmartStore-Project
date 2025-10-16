@@ -5,16 +5,16 @@
 @section('content')
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">New Product</h1>
+            <h1 class="mt-4">Edit Product</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="#">Product List</a></li>
-                <li class="breadcrumb-item active">New Product</li>
+                <li class="breadcrumb-item active">Edit Product</li>
             </ol>
             <div class="card mb-4">
                 <div class="card-header">
                     <div>
-                        New Product
+                        Edit Product
                     </div>
                 </div>
                 <div class="card-body">
