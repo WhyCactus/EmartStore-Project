@@ -160,21 +160,110 @@
 
 
     // Quantity
-    $('.qty button').on('click', function () {
-        var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
-        if ($button.hasClass('btn-plus')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
+    document.addEventListener('DOMContentLoaded', function () {
+        let updateTimeout;
+
+        function updateTotalPrice(itemId, quantity, unitPrice) {
+            const totalPrice = quantity * unitPrice;
+            const totalElement = document.getElementById(`total-price-${itemId}`);
+            if (totalElement) {
+                totalElement.textContent = '$' + totalPrice.toFixed(2);
+            }
+
+            updateCartSummary();
+        }
+
+        function updateCartSummary() {
+            let newSubtotal = 0;
+
+            const totalElements = document.querySelectorAll('.total-price');
+            totalElements.forEach(element => {
+                const priceText = element.textContent.replace('$', '');
+                newSubtotal += parseFloat(priceText);
+            });
+
+            const shippingCost = 1;
+            const newGrandTotal = newSubtotal + shippingCost;
+
+            const subtotalElement = document.querySelector('.subtotal-amount');
+            const grandtotalElement = document.querySelector('.grandtotal-amount');
+
+            if (subtotalElement) {
+                subtotalElement.textContent = '$' + newSubtotal.toFixed(2);
+            }
+            if (grandtotalElement) {
+                grandtotalElement.textContent = '$' + newGrandTotal.toFixed(2);
             }
         }
-        $button.parent().find('input').val(newVal);
-    });
 
+        function autoSubmitForm(itemId) {
+            const form = document.querySelector(`.update-form input[data-item-id="${itemId}"]`).closest('form');
+
+            if (updateTimeout) {
+                clearTimeout(updateTimeout);
+            }
+
+            updateTimeout = setTimeout(() => {
+                form.submit();
+            }, 1000);
+        }
+
+        const minusButtons = document.querySelectorAll('.btn-minus');
+        minusButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.dataset.itemId;
+                const unitPrice = parseFloat(this.dataset.unitPrice);
+                const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+
+                let currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                    updateTotalPrice(itemId, input.value, unitPrice);
+                    autoSubmitForm(itemId);
+                }
+            });
+        });
+
+        const plusButtons = document.querySelectorAll('.btn-plus');
+        plusButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const itemId = this.dataset.itemId;
+                const unitPrice = parseFloat(this.dataset.unitPrice);
+                const input = document.querySelector(`.quantity-input[data-item-id="${itemId}"]`);
+
+                let currentValue = parseInt(input.value);
+                input.value = currentValue + 1;
+                updateTotalPrice(itemId, input.value, unitPrice);
+                autoSubmitForm(itemId);
+            });
+        });
+
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        quantityInputs.forEach(input => {
+            input.addEventListener('input', function () {
+                const itemId = this.dataset.itemId;
+                const unitPrice = parseFloat(this.dataset.unitPrice);
+                let quantity = parseInt(this.value) || 1;
+
+                if (quantity < 1) {
+                    quantity = 1;
+                    this.value = 1;
+                }
+
+                updateTotalPrice(itemId, quantity, unitPrice);
+                autoSubmitForm(itemId);
+            });
+
+            input.addEventListener('blur', function () {
+                let quantity = parseInt(this.value) || 1;
+                if (quantity < 1) {
+                    this.value = 1;
+                    updateTotalPrice(this.dataset.itemId, 1, parseFloat(this.dataset.unitPrice));
+                    autoSubmitForm(this.dataset.itemId);
+                }
+            });
+        });
+    });
 
     // Shipping address show hide
     $('.checkout #shipto').change(function () {

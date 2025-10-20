@@ -19,16 +19,8 @@ class HomeService {
         return $this->homeRepository->getProductsByBrand($brandId, $sort, $perPage);
     }
 
-    public function getProducts($sort = 'newest', $perPage = 9) {
-        return $this->homeRepository->getProducts($sort, $perPage);
-    }
-
     public function getCategories() {
         return $this->homeRepository->getCategories();
-    }
-
-    public function getBrands() {
-        return $this->homeRepository->getBrands();
     }
 
     public function getFilterData() {

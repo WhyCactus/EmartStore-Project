@@ -31,15 +31,13 @@
                                     <button type="submit" class="dropdown-item">Logout</button>
                                 </form>
                             </div>
-                        @else
-                            <a href="{{ route('login') }}">Login</a>
-                        @endauth
-
-                    </div>
-                    <div class="cart">
-                        <i class="fa fa-cart-plus"></i>
-                        <span>(0)</span>
-                    </div>
+                        </div>
+                        <div class="cart">
+                            <a href="{{ route('cart.list') }}"><i class="fa fa-cart-plus"></i></a>
+                        </div>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+                    @endauth
                 </div>
             </div>
         </div>

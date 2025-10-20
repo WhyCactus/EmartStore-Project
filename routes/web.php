@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -22,7 +23,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
     Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
-
     Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
@@ -34,9 +34,14 @@ Route::middleware('regular.user')->group(function () {
     Route::post('update-account', [UserController::class, 'updateAccount'])->name('update-account');
     Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password');
 
-    Route::get('/cart', function () {
-        return view('pages.cart');
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartController::class, 'show'])->name('list');
+        Route::post('/items',[CartController::class,'addItem'])->name('addItem');
+        Route::put('/items/{cartItemId}', [CartController::class, 'updateItem'])->name('updateItem');
+        Route::delete('/items/{cartItemId}', [CartController::class, 'removeItem'])->name('removeItem');
+        Route::delete('/', [CartController::class, 'clear'])->name('clear');
     });
+
     Route::get('/checkout', function () {
         return view('pages.checkout');
     });

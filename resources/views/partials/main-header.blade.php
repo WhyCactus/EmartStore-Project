@@ -11,10 +11,13 @@
                     <a href="{{ route('home') }}" class="nav-item nav-link active">Home</a>
                     <a href="{{ route('product.list') }}" class="nav-item nav-link">Products</a>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">More</a>
                         <div class="dropdown-menu">
-                            <a href="/cart" class="dropdown-item">Cart</a>
-                            <a href="/checkout" class="dropdown-item">Checkout</a>
+                            {{-- @foreach ($categories as $category)
+                                <a href="{{ route('product.list', ['id' => $category->id]) }}" class="dropdown-item">
+                                    {{ $category->category_name }}
+                                </a>
+                            @endforeach --}}
                         </div>
                     </div>
                 </div>

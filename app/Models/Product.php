@@ -59,4 +59,24 @@ class Product extends Model
         return round((($this->original_price - $this->discounted_price) / $this->original_price) * 100);
     }
 
+    public function getCurrentPriceAttribute()
+    {
+        if (
+            $this->discounted_price &&
+            $this->discounted_price > 0 &&
+            $this->discounted_price < $this->original_price
+        ) {
+            return $this->discounted_price;
+        }
+
+        return $this->original_price;
+    }
+
+    public function getHasDiscountAttribute()
+    {
+        return $this->discounted_price &&
+            $this->discounted_price > 0 &&
+            $this->discounted_price < $this->original_price;
+    }
+
 }

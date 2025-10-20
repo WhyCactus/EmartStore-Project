@@ -44,10 +44,11 @@
 
                                 @if ($product->quantity_in_stock > 0)
                                     <div class="action">
-                                        <form action="#" method="POST" class="d-inline">
+                                        <form action="{{ route('cart.addItem') }}" method="POST" class="d-inline">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="quantity" value="1" id="quantity-input">
+                                            <input type="hidden" name="unit_price" value="{{ $product->current_price }}">
+                                            <input type="hidden" name="quantity" value="1">
                                             <button type="submit" class="btn btn-link">
                                                 <i class="fa fa-cart-plus"></i> Add to Cart
                                             </button>
