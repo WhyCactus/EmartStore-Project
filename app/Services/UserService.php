@@ -22,4 +22,29 @@ class UserService
     {
         return $this->userRepository->getById($id);
     }
+
+    public function getCurrentUser()
+    {
+        return $this->userRepository->getCurrentUser();
+    }
+
+    public function updateAccount(array $data)
+    {
+        return $this->userRepository->updateCurrentUser($data);
+    }
+
+    public function updateUser($id, array $data)
+    {
+        return $this->userRepository->update($id, $data);
+    }
+
+    public function changePassword(array $data)
+    {
+        return $this->userRepository->changeCurrentUserPassword($data);
+    }
+
+    public function changeUserPassword($id, array $data)
+    {
+        return $this->userRepository->changePassword($id, $data);
+    }
 }

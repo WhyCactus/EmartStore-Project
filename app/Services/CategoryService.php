@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\CategoryRepository;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryService
 {
     protected $categoryRepository;
 
-    public function __construct(BaseRepositoryInterface $categoryRepository)
+    public function __construct(CategoryRepository $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
     }

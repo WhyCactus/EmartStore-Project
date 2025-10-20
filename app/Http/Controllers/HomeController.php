@@ -4,92 +4,78 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Product;
+use App\Services\HomeService;
+use App\Services\CategoryService;
+use App\Services\BrandService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    protected $homeService;
+    protected $categoryService;
+    protected $brandService;
+
+    public function __construct(HomeService $homeService, CategoryService $categoryService, BrandService $brandService)
+    {
+        $this->homeService = $homeService;
+        $this->categoryService = $categoryService;
+        $this->brandService = $brandService;
+    }
+
     public function index()
     {
-        $categories = Category::withCount('products')
-            ->limit(6)
-            ->get();
-
-        $featuredProducts = Product::with('brand', 'category')
-            ->where('status', 'active')
-            ->where('quantity_in_stock', '>', 0)
-            ->inRandomOrder()
-            ->limit(5)
-            ->get();
-
-        $recentProducts = Product::with('brand', 'category')
-            ->where('status', 'active')
-            ->where('quantity_in_stock', '>', 0)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return view('home.index', compact('featuredProducts', 'recentProducts','categories'));
+        try {
+            $categories = $this->homeService->getCategories();
+            $featuredProducts = $this->homeService->getFeaturedProducts();
+            $recentProducts = $this->homeService->getRecentProducts();
+            return view('home.index', compact('featuredProducts', 'recentProducts', 'categories'));
+        } catch (\Throwable $e) {
+            return abort(404);
+        }
     }
 
     public function list(Request $request)
     {
-        $sort = $request->get('sort', 'newest');
-
-        $categories = Category::withCount('products')->get();
-        $brands = Brand::withCount('products')->get();
-
-        $products = Product::with('brand', 'category')
-            ->when($sort === 'newest', function ($query) {
-                return $query->orderBy('created_at', 'desc');
-            })
-            ->when($sort === 'popular', function ($query) {
-                return $query->orderBy('sold_count', 'desc');
-            })
-            ->where('status', 'active')
-            ->where('quantity_in_stock', '>', 0)
-            ->orderBy('created_at', 'desc')
-            ->paginate(9);
-
-        return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+        try {
+            $sort = $request->get('sort', 'newest');
+            $products = $this->homeService->getAllProducts($sort);
+            $categories = $this->categoryService->getAllCategories();
+            $brands = $this->brandService->getAllBrands();
+            return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Error loading products: ' . $e->getMessage());
+        }
     }
 
     public function getProductByCategory(Request $request, $categoryId)
     {
-        $sort = $request->get('sort', 'newest');
-
-        $categories = Category::withCount('products')->get();
-        $brands = Brand::withCount('products')->get();
-
-        $products = Product::where('category_id', $categoryId)
-            ->when($sort === 'newest', function ($query) {
-                return $query->orderBy('created_at', 'desc');
-            })
-            ->when($sort === 'popular', function ($query) {
-                return $query->orderBy('sold_count', 'desc');
-            })
-            ->where('status', 'active')
-            ->paginate(9);
-
-        return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+        try {
+            $sort = $request->get('sort', 'newest');
+            $products = $this->homeService->getProductsByCategory($categoryId, $sort);
+            $categories = $this->categoryService->getAllCategories();
+            $brands = $this->brandService->getAllBrands();
+            return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Error loading products: ' . $e->getMessage());
+        }
     }
 
     public function getProductByBrand(Request $request, $brandId)
     {
-        $sort = $request->get('sort', 'newest');
-
-        $categories = Category::withCount('products')->get();
-        $brands = Brand::withCount('products')->get();
-
-        $products = Product::where('brand_id', $brandId)
-            ->when($sort === 'newest', function ($query) {
-                return $query->orderBy('created_at', 'desc');
-            })
-            ->when($sort === 'popular', function ($query) {
-                return $query->orderBy('sold_count', 'desc');
-            })
-            ->where('status', 'active')
-            ->paginate(9);
-
-        return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+        try {
+            $sort = $request->get('sort', 'newest');
+            $products = $this->homeService->getProductsByBrand($brandId, $sort);
+            $categories = $this->categoryService->getAllCategories();
+            $brands = $this->brandService->getAllBrands();
+            return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('home')
+                ->with('error', 'Error loading products: ' . $e->getMessage());
+        }
     }
 }

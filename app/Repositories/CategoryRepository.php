@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Category;
-use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\CategoryRepositoryInterface;
 
-class CategoryRepository implements BaseRepositoryInterface
+class CategoryRepository implements CategoryRepositoryInterface
 {
     protected $model;
 
@@ -40,15 +40,5 @@ class CategoryRepository implements BaseRepositoryInterface
     {
         $category = $this->getById($id);
         return $category->delete();
-    }
-
-    public function getAllWithRelations(array $relations = [])
-    {
-        return $this->model->with($relations)->get();
-    }
-
-    public function getByIdWithRelations($id, array $relations = [])
-    {
-        return $this->model->with($relations)->findOrFail($id);
     }
 }

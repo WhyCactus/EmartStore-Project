@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Brand;
-use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\BrandRepositoryInterface;
 
-class BrandRepository implements BaseRepositoryInterface
+class BrandRepository implements BrandRepositoryInterface
 {
     protected $model;
 
@@ -40,15 +40,5 @@ class BrandRepository implements BaseRepositoryInterface
     {
         $brand = $this->getById($id);
         return $brand->delete();
-    }
-
-    public function getAllWithRelations(array $relations = [])
-    {
-        return $this->model->with($relations)->get();
-    }
-
-    public function getByIdWithRelations($id, array $relations = [])
-    {
-        return $this->model->with($relations)->findOrFail($id);
     }
 }

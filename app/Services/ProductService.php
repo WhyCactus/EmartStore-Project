@@ -91,4 +91,13 @@ class ProductService
 
         return $this->productRepository->delete($id);
     }
+
+    public function getRelatedProducts($id)
+    {
+        try {
+            return $this->productRepository->getRelatedProducts($id);
+        } catch (\Throwable $e) {
+            throw new \Exception("Failed to get related products: " . $e->getMessage());
+        }
+    }
 }

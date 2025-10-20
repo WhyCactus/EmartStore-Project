@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use App\Repositories\BaseRepositoryInterface;
+use App\Repositories\BrandRepository;
 
 class BrandService
 {
     private $brandRepository;
 
-    public function __construct(BaseRepositoryInterface $brandRepository)
+    public function __construct(BrandRepository $brandRepository)
     {
         $this->brandRepository = $brandRepository;
     }

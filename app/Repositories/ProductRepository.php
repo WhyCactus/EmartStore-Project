@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use App\Repositories\ProductRepositoryInterface;
 
-class ProductRepository implements BaseRepositoryInterface
+class ProductRepository implements ProductRepositoryInterface
 {
     protected $model;
 
@@ -49,5 +50,21 @@ class ProductRepository implements BaseRepositoryInterface
     {
         $product = $this->getById($id);
         return $product->delete();
+    }
+
+    public function getRelatedProducts($id)
+    {
+        return $this->model
+            ->with(['brand', 'category'])
+            ->where('category_id', $this->getById($id)->category_id)
+            ->where('id', '!=', $id)
+            ->where('status', 'active')
+            ->limit(6)
+            ->get();
+    }
+
+    public function getProductByIdWithRelations($id, $relations = ['brand', 'category'])
+    {
+        return $this->model->with($relations)->findOrFail($id);
     }
 }
