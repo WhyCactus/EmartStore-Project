@@ -12,8 +12,6 @@
                         <a class="nav-link active" id="dashboard-nav" data-toggle="pill" href="#dashboard-tab"
                             role="tab">Dashboard</a>
                         <a class="nav-link" id="orders-nav" data-toggle="pill" href="#orders-tab" role="tab">Orders</a>
-                        <a class="nav-link" id="address-nav" data-toggle="pill" href="#address-tab"
-                            role="tab">address</a>
                         <a class="nav-link" id="account-nav" data-toggle="pill" href="#account-tab" role="tab">Account
                             Details</a>
                         <a class="nav-link" href="#"
@@ -60,23 +58,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="address-tab" role="tabpanel" aria-labelledby="address-nav">
-                            <h4>Address</h4>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h5>Payment Address</h5>
-                                    <p>123 Payment Street, Los Angeles, CA</p>
-                                    <p>Mobile: 012-345-6789</p>
-                                    <button>Edit Address</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <h5>Shipping Address</h5>
-                                    <p>123 Shipping Street, Los Angeles, CA</p>
-                                    <p>Mobile: 012-345-6789</p>
-                                    <button>Edit Address</button>
-                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="account-tab" role="tabpanel" aria-labelledby="account-nav">

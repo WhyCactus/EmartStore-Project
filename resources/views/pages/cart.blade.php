@@ -91,9 +91,11 @@
                                 <h4>Grand Total<span class="grandtotal-amount">${{ number_format($grandTotal, 2) }}</span>
                                 </h4>
                             </div>
-                            <div class="cart-btn">
-                                <button class="btn-checkout">Checkout</button>
-                            </div>
+                            <form action="{{ route('checkout') }}" method="GET">
+                                <div class="cart-btn">
+                                    <button type="submit" class="btn-checkout">Checkout</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

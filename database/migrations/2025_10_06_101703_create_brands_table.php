@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('brand_name');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

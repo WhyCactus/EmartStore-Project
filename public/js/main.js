@@ -304,3 +304,45 @@ document.querySelectorAll('.rating-star').forEach(star => {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const shippingMethod = document.getElementById('shipping-method');
+    const shippingCost = document.getElementById('shipping-cost');
+    const grandTotal = document.getElementById('grand-total');
+    const subTotal = document.getElementById('sub-total').textContent;
+
+    // Payment method show/hide
+    const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
+    const paymentContents = document.querySelectorAll('.payment-content');
+
+    function calculateTotal() {
+        let cost = shippingMethod.value === 'standard' ? 20000 : 35000;
+        shippingCost.textContent = cost.toLocaleString() + '₫';
+        grandTotal.textContent = (subTotal + cost).toLocaleString() + '₫';
+    }
+
+    function togglePaymentContent() {
+        paymentContents.forEach(content => {
+            content.style.display = 'none';
+        });
+
+        const selectedPayment = document.querySelector('input[name="payment_method"]:checked');
+        if (selectedPayment) {
+            const contentId = selectedPayment.id + '-show';
+            const contentElement = document.getElementById(contentId);
+            if (contentElement) {
+                contentElement.style.display = 'block';
+            }
+        }
+    }
+
+    // Event listeners
+    shippingMethod.addEventListener('change', calculateTotal);
+
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', togglePaymentContent);
+    });
+
+    // Initialize
+    togglePaymentContent();
+});

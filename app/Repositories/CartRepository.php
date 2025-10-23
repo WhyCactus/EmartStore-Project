@@ -38,7 +38,7 @@ class CartRepository implements CartRepositoryInterface
             'product_variant_id' => $itemData['product_variant_id'],
             'quantity' => $quantity,
             'unit_price' => $unitPriced,
-            'total_price' => $totalPrice
+            'total_price' => $totalPrice,
         ]);
     }
 
@@ -63,5 +63,17 @@ class CartRepository implements CartRepositoryInterface
             return $cart->items()->delete();
         }
         return false;
+    }
+
+    public function getCartItems($cartId)
+    {
+        return CartItem::with(['product', 'productVariant'])
+            ->where('cart_id', $cartId)
+            ->get();
+    }
+
+    public function getCartTotal($cartId)
+    {
+        return CartItem::where('cart_id', $cartId)->sum('total_price');
     }
 }

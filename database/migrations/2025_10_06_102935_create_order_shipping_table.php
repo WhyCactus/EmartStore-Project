@@ -15,13 +15,11 @@ return new class extends Migration {
             $table->foreignId('order_id')->unique()->constrained()->onDelete('cascade');
             $table->string('shipping_method');
             $table->decimal('shipping_cost', 15, 2)->default(0);
-            $table->string('tracking_number')->nullable();
-            $table->enum('delivery_status', ['pending', 'shipped', 'in_transit', 'delivered', 'failed'])->default('pending');
             $table->date('estimated_delivery')->nullable();
             $table->dateTime('actual_delivery')->nullable();
-            $table->text('delivery_notes')->nullable();
-            $table->text('failed_reason')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -9,4 +9,6 @@ interface CartRepositoryInterface
     public function updateCartItem($cartItemId, $quantity);
     public function removeItemItem($cartItemId);
     public function clearCart($userId);
+    public function getCartItems($cartId);
+    public function getCartTotal($cartId);
 }

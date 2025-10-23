@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -42,9 +43,9 @@ Route::middleware('regular.user')->group(function () {
         Route::delete('/', [CartController::class, 'clear'])->name('clear');
     });
 
-    Route::get('/checkout', function () {
-        return view('pages.checkout');
-    });
+    Route::get('/checkout',[CheckOutController::class,'showCheckOut'])->name('checkout');
+    Route::post('/checkout', [CheckOutController::class,'processCheckOut'])->name('checkout.process');
+    Route::get('/checkout/success/{orderCode}', [CheckOutController::class, 'checkoutSuccess'])->name('checkout.success');
 });
 
 

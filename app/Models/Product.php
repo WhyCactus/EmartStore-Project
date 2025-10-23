@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'product_name',
         'product_code',
@@ -20,6 +23,12 @@ class Product extends Model
         'brand_id',
         'quantity_in_stock',
         'sold_count'
+    ];
+
+    protected $casts = [
+        'deleted_at'=> 'datetime',
+        'updated_at'=> 'datetime',
+        'created_at'=> 'datetime',
     ];
 
     public function brand(): BelongsTo

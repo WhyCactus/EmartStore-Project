@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->integer('quantity_in_stock')->default(0);
             $table->integer('sold_count')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
