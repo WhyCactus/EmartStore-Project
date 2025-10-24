@@ -19,11 +19,17 @@
                                     <label>E-mail</label>
                                     <input class="form-control" type="text" name="email"
                                         placeholder="E-mail or Username" required>
+                                    @error('email')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <label>Password</label>
                                     <input class="form-control" type="password" name="password" placeholder="Password"
                                         required>
+                                    @error('password')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-12">
                                     <button class="btn" type="submit">Login</button>

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Http\Requests\ForgotPasswordRequest;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRequest;
+use App\Repositories\AuthRepositoryInterface;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -11,12 +15,19 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    protected $authRepository;
+
+    public function __construct(AuthRepositoryInterface $authRepository)
+    {
+        $this->authRepository = $authRepository;
+    }
+
     public function index()
     {
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -26,52 +37,24 @@ class AuthController extends Controller
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
-
-                return back()->with('error', 'Your account is not active.');
+                return redirect()->back()->with('error', 'Your account is inactive. Please contact the administrator.');
             }
             return redirect()->route('home');
         }
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ])->onlyInput('email');
+        return back()->with('error', 'Email or password is incorrect.')->onlyInput('email');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|confirmed|min:8',
-            'phone' => 'nullable|string|max:20',
-        ], [
-            'username.required' => 'Please enter your username.',
+        $this->authRepository->create($request->validated());
 
-            'email.required' => 'Please enter your email address.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email address is already in use.',
-
-            'password.required' => 'Please enter your password.',
-            'password.confirmed' => 'The password confirmation does not match.',
-            'password.min' => 'Password must be at least 8 characters.',
-        ]);
-
-        $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'role_id' => 2
-        ]);
-
-        return redirect()->route('login')->with('success', 'Registration successful!');
+        return redirect()->route('login')->with('success', 'Account created successfully!');
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
         return redirect()->route('login');
     }
 
@@ -80,60 +63,35 @@ class AuthController extends Controller
         return view('auth.forgot-password');
     }
 
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ], [
-            'email.required' => 'Please enter your email address.',
-            'email.email' => 'Please enter a valid email address.',
-            'email.exists' => 'This email address is not registered.',
-        ]);
-
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = Password::sendResetLink($request->only('email'));
 
         if ($status === Password::RESET_LINK_SENT) {
-            return back()->with(['status' => __($status)]);
+            return back()->with('status', __($status));
         }
 
-        return back()->withErrors([
-            'email' => __($status),
-        ]);
+        return back()->withErrors(['email' => __($status)]);
     }
 
-    public function showResetPasswordForm(Request $request, $token = null)
+    public function showResetPasswordForm(ResetPasswordRequest $request, $token = null)
     {
-        $email = $request->input('email');
-
-        return view('auth.reset', ['token' => $token, 'email' => $email]);
+        return view('auth.reset', ['token' => $token, 'email' => $request->email]);
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-        ], [
-            'password.required' => 'Please enter your password.',
-            'password.confirmed' => 'The password confirmation does not match.',
-            'password.min' => 'Password must be at least 8 characters.',
-        ]);
+        $status = Password::reset($request->validated(), function ($user, $password) {
+            $user
+                ->forceFill([
+                    'password' => Hash::make($password),
+                ])
+                ->setRememberToken(Str::random(60));
 
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->setRememberToken(Str::random(60));
+            $user->save();
 
-                $user->save();
-
-                event(new \Illuminate\Auth\Events\PasswordReset($user));
-            }
-        );
+            event(new PasswordReset($user));
+        });
 
         if ($status === Password::PASSWORD_RESET) {
             return redirect()->route('login')->with('status', __($status));

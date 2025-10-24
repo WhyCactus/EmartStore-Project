@@ -27,6 +27,11 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Brands
                 </a>
+
+                <a href="#" class="nav-link">
+                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                    Orders
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">

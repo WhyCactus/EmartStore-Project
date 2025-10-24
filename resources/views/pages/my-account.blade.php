@@ -40,7 +40,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>No</th>
-                                            <th>Product</th>
+                                            <th>Order Code</th>
                                             <th>Date</th>
                                             <th>Price</th>
                                             <th>Status</th>
@@ -48,14 +48,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Product Name</td>
-                                            <td>01 Jan 2020</td>
-                                            <td>$22</td>
-                                            <td>Approved</td>
-                                            <td><button>View</button></td>
-                                        </tr>
+                                        @foreach ($orders as $order)
+                                            <tr>
+                                                <td>{{ $order->id }}</td>
+                                                <td>{{ $order->order_code }}</td>
+                                                <td>{{ $order->created_at->format('d-m-Y') }}</td>
+                                                <td>${{ $order->total_amount }}</td>
+                                                <td>{{ $order->order_status }}</td>
+                                                <td>
+                                                    <a href="#" class="btn btn-success">
+                                                        <i class="bi bi-dash-circle"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -73,7 +79,7 @@
                                 </div>
                             @endif
                             <h4>Account Details</h4>
-                            <form action="{{ route('update-account') }}" method="POST">
+                            <form action="{{ route('my-account.update-account') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
@@ -107,7 +113,7 @@
                                 </div>
                             </form>
                             <h4>Password change</h4>
-                            <form action="{{ route('change-password') }}" method="POST">
+                            <form action="{{ route('my-account.change-password') }}" method="POST">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">

@@ -36,6 +36,7 @@ class CheckoutRepository implements CheckOutRepositoryInterface
     {
         $orderItems = [];
 
+        // Note: insert instead of foreach
         foreach ($items as $item) {
             $validatedItem = [
                 'order_id' => $orderId,
