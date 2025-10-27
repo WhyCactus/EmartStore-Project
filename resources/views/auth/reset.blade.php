@@ -15,14 +15,8 @@
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="col-md-12">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                                name="email" value="{{ $email ?? old('email') }}" required autofocus readonly>
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input type="email" class="form-control" id="email"
+                                name="email" value="{{ $email ?? old('email') }}" required autofocus hidden>
                         </div>
 
                         <div class="col-md-12">

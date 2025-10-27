@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Repositories\AuthRepositoryInterface;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -74,9 +75,20 @@ class AuthController extends Controller
         return back()->withErrors(['email' => __($status)]);
     }
 
-    public function showResetPasswordForm(ResetPasswordRequest $request, $token = null)
+    public function showResetPasswordForm(Request $request, $token)
     {
-        return view('auth.reset', ['token' => $token, 'email' => $request->email]);
+        $email = $request->query('email');
+
+        if (!$token || !$email) {
+            return redirect()
+                ->back()
+                ->withErrors(['email' => 'The password reset token is invalid.']);
+        }
+
+        return view('auth.reset', [
+            'token' => $token,
+            'email' => $email,
+        ]);
     }
 
     public function resetPassword(ResetPasswordRequest $request)
@@ -94,7 +106,7 @@ class AuthController extends Controller
         });
 
         if ($status === Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('status', __($status));
+            return redirect()->route('login')->with('success', 'Your password has been reset successfully!');
         }
 
         return back()
