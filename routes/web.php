@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminBrandController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
@@ -79,5 +80,7 @@ Route::middleware(['auth', 'role'])->group(function () {
             Route::post('/create-brand', [AdminBrandController::class, 'store'])->name('store-brand');
             Route::get('/edit-brand/{id}', [AdminBrandController::class, 'edit'])->name('edit-brand');
             Route::put('/edit-brand/{id}', [AdminBrandController::class, 'update'])->name('update-brand');
+            Route::get('/orders',[AdminOrderController::class, 'index'])->name('orders');
+            Route::get('/orders/{id}', [AdminOrderController::class,'detail'])->name('order-detail');
         });
 });

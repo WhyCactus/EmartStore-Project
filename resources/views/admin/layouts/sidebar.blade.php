@@ -28,7 +28,7 @@
                     Brands
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.orders') }}" class="nav-link">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Orders
                 </a>

@@ -30,17 +30,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                    <a href="#" class="btn btn-primary">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                            @foreach ($orders as $order)
+                                <tr>
+                                    <td>{{ $order->id }}</td>
+                                    <td>{{ $order->order_code }}</td>
+                                    <td>{{ $order->total_amount }}</td>
+                                    <td>{{ $order->payment_method }}</td>
+                                    <td>{{ $order->order_status }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.order-detail', $order->id) }}" class="btn btn-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

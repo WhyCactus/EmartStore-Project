@@ -17,6 +17,13 @@ class AdminOrderController extends Controller
     public function index()
     {
         $orders = $this->orderRepository->getAllOrders(10);
-        return view("", compact("orders"));
+        return view("admin.pages.orderList", compact("orders"));
+    }
+
+    public function detail($id)
+    {
+        $order = $this->orderRepository->getOrderById($id);
+        
+        return view("admin.pages.orderDetail", compact("order"));
     }
 }
