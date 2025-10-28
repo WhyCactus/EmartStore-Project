@@ -82,5 +82,6 @@ Route::middleware(['auth', 'role'])->group(function () {
             Route::put('/edit-brand/{id}', [AdminBrandController::class, 'update'])->name('update-brand');
             Route::get('/orders',[AdminOrderController::class, 'index'])->name('orders');
             Route::get('/orders/{id}', [AdminOrderController::class,'detail'])->name('order-detail');
+            Route::put('/orders/{id}/update-status', [AdminOrderController::class,'updateStatus'])->name('update-status');
         });
 });

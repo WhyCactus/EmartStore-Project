@@ -36,6 +36,58 @@ class OrderRepository implements OrderRepositoryInterface
 
     public function getOrderById(int $id): Order
     {
-        return $this->model->with(['orderDetails','orderShipping'])->find($id);
+        return $this->model->with(['orderDetails', 'orderShipping'])->find($id);
+    }
+
+    public function updateStatus(int $orderId, string $status): bool
+    {
+        $order = $this->model->find($orderId);
+
+        if (!$order) {
+            throw new \Exception("Order not found");
+        }
+
+        if (!$this->validateStatusTransition($order->order_status, $status)) {
+            throw new \Exception("Invalid status transition from {$order->order_status} to {$status}");
+        }
+
+        $updated = $order->update([
+            'order_status' => $status
+        ]);
+
+        return $updated;
+    }
+
+    public function validateStatusTransition(string $currentStatus, string $newStatus): bool
+    {
+        $currentStatus = strtolower(trim($currentStatus));
+        $newStatus = strtolower(trim($newStatus));
+
+        $allowedTransitions = [
+            'pending' => ['processing', 'cancelled'],
+            'processing' => ['shipped', 'cancelled'],
+            'shipped' => ['delivered'],
+            'delivered' => [],
+            'cancelled' => []
+        ];
+
+        if ($currentStatus === $newStatus) {
+            return true;
+        }
+
+        return in_array($newStatus, $allowedTransitions[$currentStatus] ?? []);
+    }
+
+    public function getAvailableStatuses(string $currentStatus): array
+    {
+        $allowedTransitions = [
+            'pending' => ['processing', 'cancelled'],
+            'processing' => ['shipped', 'cancelled'],
+            'shipped' => ['delivered'],
+            'delivered' => [],
+            'cancelled' => []
+        ];
+
+        return $allowedTransitions[$currentStatus] ?? [];
     }
 }
