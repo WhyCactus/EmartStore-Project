@@ -24,4 +24,25 @@ class OrderController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    public function detail($id)
+    {
+        try {
+            $order = $this->orderRepository->getOrderById($id);
+            return view('pages.order-detail', compact('order'));
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Order Not Found');
+        }
+    }
+
+    public function cancelOrder($id)
+    {
+        try {
+            $this->orderRepository->cancelOrderbyId($id);
+            return redirect()->back()->with('success','Order cancelled success');
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+            return redirect()->back()->with('error', 'Server Error');
+        }
+    }
 }

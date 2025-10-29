@@ -20,9 +20,10 @@ return new class extends Migration {
             $table->decimal('subtotal_amount', 15, 2);
             $table->decimal('total_amount', 15, 2);
             $table->string('payment_method');
-            $table->enum('payment_status', ['pending', 'paid', 'failed', 'refunded'])->default('pending');
-            $table->enum('order_status', ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
+            $table->enum('payment_status', ['pending', 'paid', 'refunded'])->default('pending');
+            $table->enum('order_status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->timestamps();
+            $table->timestamp('cancelled_at')->nullable();
         });
     }
 

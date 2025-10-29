@@ -16,7 +16,15 @@ class Order extends Model
         'total_amount',
         'payment_method',
         'payment_status',
-        'order_status'];
+        'order_status',
+        'cancelled_at'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'cancelled_at' => 'datetime'
+    ];
 
     public function user()
     {

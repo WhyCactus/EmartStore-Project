@@ -56,8 +56,9 @@
                                                 <td>${{ $order->total_amount }}</td>
                                                 <td>{{ $order->order_status }}</td>
                                                 <td>
-                                                    <a href="#" class="btn btn-success">
+                                                    <a href="{{ route('my-account.order', $order->id) }}" class="btn btn-success">
                                                         <i class="bi bi-dash-circle"></i>
+                                                        <span>View</span>
                                                     </a>
                                                 </td>
                                             </tr>

@@ -39,6 +39,8 @@ Route::middleware('regular.user')->group(function () {
             Route::get('/', [OrderController::class, 'orderList'])->name('orders');
             Route::post('/update-account', [UserController::class, 'updateAccount'])->name('update-account');
             Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password');
+            Route::get('/order/{id}', [OrderController::class,'detail'])->name('order');
+            Route::put('/order/{id}', [OrderController::class,'cancelOrder'])->name('cancel');
         });
 
     Route::prefix('cart')

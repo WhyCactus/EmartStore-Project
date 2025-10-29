@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->decimal('shipping_cost', 15, 2)->default(0);
             $table->date('estimated_delivery')->nullable();
             $table->dateTime('actual_delivery')->nullable();
-            $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

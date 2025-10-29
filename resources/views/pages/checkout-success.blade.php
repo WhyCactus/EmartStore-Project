@@ -26,7 +26,7 @@
                             <a href="{{ route('home') }}" class="btn btn-primary me-2">
                                 Continue Shopping
                             </a>
-                            <a href="#" class="btn btn-outline-secondary">
+                            <a href="{{ route('my-account.order', $order->id) }}" class="btn btn-outline-secondary">
                                 View Order Details
                             </a>
                         </div>

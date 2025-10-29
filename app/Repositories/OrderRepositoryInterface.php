@@ -13,4 +13,6 @@ interface OrderRepositoryInterface
     public function getOrderById(int $id): Order;
     public function updateStatus(int $id, string $status);
     public function validateStatusTransition(string $currentStatus, string $newStatus);
+    public function cancelOrderbyId(int $id);
+    public function prepareStatusUpdateData($order, string $status);
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -51,9 +52,9 @@ class OrderRepository implements OrderRepositoryInterface
             throw new \Exception("Invalid status transition from {$order->order_status} to {$status}");
         }
 
-        $updated = $order->update([
-            'order_status' => $status
-        ]);
+        $updateData = $this->prepareStatusUpdateData($order, $status);
+
+        $updated = $order->update($updateData);
 
         return $updated;
     }
@@ -89,5 +90,28 @@ class OrderRepository implements OrderRepositoryInterface
         ];
 
         return $allowedTransitions[$currentStatus] ?? [];
+    }
+
+    public function prepareStatusUpdateData($order, string $status)
+    {
+        $data = ['order_status' => $status];
+
+        if ($status === 'cancelled') {
+            $data['cancelled_at'] = Carbon::now();
+        }
+
+        if ($status === 'delivered') {
+            $data['payment_status'] = 'paid';
+        }
+
+        return $data;
+    }
+
+    public function cancelOrderbyId(int $id): void
+    {
+        $order = Order::find($id);
+        $order->order_status = 'cancelled';
+        $order->cancelled_at = Carbon::now();
+        $order->save();
     }
 }

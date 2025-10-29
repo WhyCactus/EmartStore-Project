@@ -51,7 +51,7 @@
                                                         <div class="fw-medium">{{ $orderDetail->snapshot_product_name }}
                                                         </div>
                                                         <small class="text-muted">SKU:
-                                                            {{ $orderDetail->product_sku ?? 'N/A' }}</small>
+                                                            {{ $orderDetail->snapshot_product_sku ?? 'N/A' }}</small>
                                                     </div>
                                                 </div>
                                             </td>
@@ -87,10 +87,6 @@
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="text-muted">Shipping:</span>
                                 <span>${{ number_format($order->orderShipping->shipping_cost, 2) }}</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="text-muted">Tax:</span>
-                                <span>${{ number_format($order->tax_amount ?? 0, 2) }}</span>
                             </div>
                             <hr>
                             <div class="d-flex justify-content-between fw-bold total-amount">
@@ -134,6 +130,12 @@
                                 <div class="fw-medium">
                                     <i class="bi bi-credit-card me-1"></i>
                                     {{ $order->payment_method }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="info-label mb-1">Payment Status</div>
+                                <div class="fw-medium">
+                                    {{ $order->payment_status }}
                                 </div>
                             </div>
                             <div class="mb-3">
@@ -189,7 +191,7 @@
                             </div>
                         </div>
                         <button type="submit" class="btn">
-                            {{ empty($availableStatuses) ? 'disabled' : '' }}>
+                            {{ empty($availableStatuses) ? '' : '' }}
                             <i class="bi bi-check-circle me-1"></i> Update Status
                         </button>
                     </form>
