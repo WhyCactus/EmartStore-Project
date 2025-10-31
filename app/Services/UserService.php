@@ -47,4 +47,9 @@ class UserService
     {
         return $this->userRepository->changePassword($id, $data);
     }
+
+    public function changeStatus($id)
+    {
+        return $this->userRepository->toggleUserStatus($id);
+    }
 }

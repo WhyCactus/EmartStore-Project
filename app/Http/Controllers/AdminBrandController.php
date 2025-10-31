@@ -79,4 +79,14 @@ class AdminBrandController extends Controller
                 ->withInput();
         }
     }
+
+    public function toggleStatus($id)
+    {
+        try {
+            $this->brandService->toggleStatus($id);
+            return redirect()->back()->with('success', 'Change Status Success');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Server Error');
+        }
+    }
 }

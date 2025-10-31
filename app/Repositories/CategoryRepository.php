@@ -41,4 +41,18 @@ class CategoryRepository implements CategoryRepositoryInterface
         $category = $this->getById($id);
         return $category->delete();
     }
+
+    public function toggleCategoryStatus($id)
+    {
+        $category = $this->getById($id);
+
+        if ($category->status === 'active') {
+            $category->status = 'inactive';
+        } else {
+            $category->status = 'active';
+        }
+
+        $category->save();
+        return $category;
+    }
 }

@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.update-product', $product->id) }}" method="POST"
+                    <form action="{{ route('admin.product.update-product', $product->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -41,6 +41,12 @@
                             </div>
                             <div class="mb-3">
                                 <label>Image</label>
+                                <div>
+                                    @if (isset($product->image) && $product->image)
+                                        <img src="{{ asset('storage/' . $product->image) }}" alt="Image"
+                                            style="max-width: 100px; max-height: 100px;">
+                                    @endif
+                                </div>
                                 <input type="file" name="image" class="form-control" placeholder="Image">
                                 @error('image')
                                     <span class="text-danger">{{ $message }}</span>

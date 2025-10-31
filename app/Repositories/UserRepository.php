@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository
@@ -15,6 +14,7 @@ class UserRepository
         $this->model = $model;
     }
 
+    // COMMON
     public function getAll()
     {
         return $this->model->all();
@@ -25,6 +25,7 @@ class UserRepository
         return $this->model->findOrFail($id);
     }
 
+    // CLIENT
     public function getCurrentUser()
     {
         return auth()->user();
@@ -71,6 +72,21 @@ class UserRepository
             'password' => Hash::make($data['newPassword']),
         ]);
 
+        return $user;
+    }
+
+    // ADMIN
+    public function toggleUserStatus($id)
+    {
+        $user = $this->getById($id);
+
+        if ($user->status === 'active') {
+            $user->status = 'inactive';
+        } else {
+            $user->status = 'active';
+        }
+
+        $user->save();
         return $user;
     }
 }

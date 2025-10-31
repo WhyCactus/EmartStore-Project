@@ -41,4 +41,18 @@ class BrandRepository implements BrandRepositoryInterface
         $brand = $this->getById($id);
         return $brand->delete();
     }
+
+    public function toggleBrandStatus($id)
+    {
+        $brand = $this->getById($id);
+
+        if ($brand->status === 'active') {
+            $brand->status = 'inactive';
+        } else {
+            $brand->status = 'active';
+        }
+
+        $brand->save();
+        return $brand;
+    }
 }

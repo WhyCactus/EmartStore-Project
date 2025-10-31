@@ -39,8 +39,8 @@ Route::middleware('regular.user')->group(function () {
             Route::get('/', [OrderController::class, 'orderList'])->name('orders');
             Route::post('/update-account', [UserController::class, 'updateAccount'])->name('update-account');
             Route::post('/change-password', [UserController::class, 'changePassword'])->name('change-password');
-            Route::get('/order/{id}', [OrderController::class,'detail'])->name('order');
-            Route::put('/order/{id}', [OrderController::class,'cancelOrder'])->name('cancel');
+            Route::get('/order/{id}', [OrderController::class, 'detail'])->name('order');
+            Route::put('/order/{id}', [OrderController::class, 'cancelOrder'])->name('cancel');
         });
 
     Route::prefix('cart')
@@ -67,23 +67,40 @@ Route::middleware(['auth', 'role'])->group(function () {
             })->name('admin.dashboard');
 
             Route::get('/users', [AdminUserController::class, 'index'])->name('users');
-            Route::get('/products', [AdminProductController::class, 'index'])->name('products');
-            Route::get('/create-product', [AdminProductController::class, 'create'])->name('create-product');
-            Route::post('/create-product', [AdminProductController::class, 'store'])->name('store-product');
-            Route::get('/edit-product/{id}', [AdminProductController::class, 'edit'])->name('edit-product');
-            Route::put('/edit-product/{id}', [AdminProductController::class, 'update'])->name('update-product');
-            Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories');
-            Route::get('/create-category', [AdminCategoryController::class, 'create'])->name('create-category');
-            Route::post('/create-category', [AdminCategoryController::class, 'store'])->name('store-category');
-            Route::get('/edit-category/{id}', [AdminCategoryController::class, 'edit'])->name('edit-category');
-            Route::put('/edit-category/{id}', [AdminCategoryController::class, 'update'])->name('update-category');
-            Route::get('/brands', [AdminBrandController::class, 'index'])->name('brands');
-            Route::get('/create-brand', [AdminBrandController::class, 'create'])->name('create-brand');
-            Route::post('/create-brand', [AdminBrandController::class, 'store'])->name('store-brand');
-            Route::get('/edit-brand/{id}', [AdminBrandController::class, 'edit'])->name('edit-brand');
-            Route::put('/edit-brand/{id}', [AdminBrandController::class, 'update'])->name('update-brand');
-            Route::get('/orders',[AdminOrderController::class, 'index'])->name('orders');
-            Route::get('/orders/{id}', [AdminOrderController::class,'detail'])->name('order-detail');
-            Route::put('/orders/{id}/update-status', [AdminOrderController::class,'updateStatus'])->name('update-status');
+            Route::put('/user/{id}', [AdminUserController::class, 'toggleStatus'])->name('toggle-status');
+
+            //PRODUCT
+            Route::prefix('product')->name('product.')->group(function () {
+                Route::get('/products', [AdminProductController::class, 'index'])->name('products');
+                Route::get('/create-product', [AdminProductController::class, 'create'])->name('create-product');
+                Route::post('/create-product', [AdminProductController::class, 'store'])->name('store-product');
+                Route::get('/edit-product/{id}', [AdminProductController::class, 'edit'])->name('edit-product');
+                Route::put('/edit-product/{id}', [AdminProductController::class, 'update'])->name('update-product');
+            });
+
+            //CATEGORY
+            Route::prefix('category')->name('category.')->group(function () {
+                Route::get('/categories', [AdminCategoryController::class, 'index'])->name('categories');
+                Route::get('/create-category', [AdminCategoryController::class, 'create'])->name('create-category');
+                Route::post('/create-category', [AdminCategoryController::class, 'store'])->name('store-category');
+                Route::get('/edit-category/{id}', [AdminCategoryController::class, 'edit'])->name('edit-category');
+                Route::put('/edit-category/{id}', [AdminCategoryController::class, 'update'])->name('update-category');
+                Route::put('/category/{id}', [AdminCategoryController::class, 'toggleStatus'])->name('toggle-status');
+            });
+
+            //BRAND
+            Route::prefix('brand')->name('brand.')->group(function () {
+                Route::get('/brands', [AdminBrandController::class, 'index'])->name('brands');
+                Route::get('/create-brand', [AdminBrandController::class, 'create'])->name('create-brand');
+                Route::post('/create-brand', [AdminBrandController::class, 'store'])->name('store-brand');
+                Route::get('/edit-brand/{id}', [AdminBrandController::class, 'edit'])->name('edit-brand');
+                Route::put('/edit-brand/{id}', [AdminBrandController::class, 'update'])->name('update-brand');
+                Route::put('/brand/{id}', [AdminBrandController::class, 'toggleStatus'])->name('toggle-status');
+            });
+
+            //ORDER
+            Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders');
+            Route::get('/orders/{id}', [AdminOrderController::class, 'detail'])->name('order-detail');
+            Route::put('/orders/{id}/update-status', [AdminOrderController::class, 'updateStatus'])->name('update-status');
         });
 });

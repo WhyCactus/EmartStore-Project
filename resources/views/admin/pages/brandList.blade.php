@@ -16,7 +16,7 @@
                         <i class="fas fa-table me-1"></i>
                         Brands
                     </div>
-                    <a href="{{ route('admin.create-brand') }}" class="btn btn-primary text-end">
+                    <a href="{{ route('admin.brand.create-brand') }}" class="btn btn-primary text-end">
                         <i class="bi bi-plus-circle"></i>
                         Create Brand
                     </a>
@@ -38,9 +38,26 @@
                                     <td>{{ $brand->brand_name }}</td>
                                     <td>{{ $brand->status }}</td>
                                     <td>
-                                        <a href="{{ route('admin.edit-brand', $brand->id) }}" class="btn btn-warning">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </a>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ route('admin.brand.edit-brand', $brand->id) }}"
+                                                class="btn btn-warning">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.brand.toggle-status', $brand->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                @if ($brand->status == 'active')
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <i class="bi bi-dash-circle"></i>
+                                                    </button>
+                                                @elseif ($brand->status == 'inactive')
+                                                    <button type="submit" class="btn btn-outline-success">
+                                                        <i class="bi bi-plus-circle"></i>
+                                                    </button>
+                                                @endif
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

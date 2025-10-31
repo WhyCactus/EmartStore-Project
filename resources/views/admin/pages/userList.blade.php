@@ -38,9 +38,19 @@
                                     <td>{{ $user->role->name }}</td>
                                     <td>{{ $user->status }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-danger">
-                                            <i class="bi bi-dash-circle"></i>
-                                        </a>
+                                        <form action="{{ route('admin.toggle-status', $user->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            @if ($user->status == 'active')
+                                                <button type="submit" class="btn btn-outline-danger">
+                                                    <i class="bi bi-dash-circle"></i>
+                                                </button>
+                                            @elseif ($user->status == 'inactive')
+                                                <button type="submit" class="btn btn-outline-success">
+                                                    <i class="bi bi-plus-circle"></i>
+                                                </button>
+                                            @endif
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

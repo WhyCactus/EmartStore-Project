@@ -71,4 +71,10 @@ class CategoryService
 
         return $this->categoryRepository->delete($id);
     }
+
+    public function toggleStatus($id)
+    {
+        $status = $this->categoryRepository->toggleCategoryStatus($id);
+        return $status;
+    }
 }

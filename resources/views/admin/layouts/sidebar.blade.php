@@ -13,17 +13,17 @@
                     Users
                 </a>
 
-                <a href="{{ route('admin.products') }}" class="nav-link">
+                <a href="{{ route('admin.product.products') }}" class="nav-link">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Products
                 </a>
 
-                <a href="{{ route('admin.categories') }}" class="nav-link">
+                <a href="{{ route('admin.category.categories') }}" class="nav-link">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Categories
                 </a>
 
-                <a href="{{ route('admin.brands') }}" class="nav-link">
+                <a href="{{ route('admin.brand.brands') }}" class="nav-link">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Brands
                 </a>

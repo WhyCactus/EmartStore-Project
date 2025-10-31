@@ -43,4 +43,10 @@ class BrandService
 
         return $this->brandRepository->update($id, $updatedData);
     }
+
+    public function toggleStatus($id)
+    {
+        $brand = $this->brandRepository->toggleBrandStatus($id);
+        return $brand;
+    }
 }

@@ -12,7 +12,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('assets/demo/chart-bar-demo.js') }}"></script>
     <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
 @endpush

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
-use App\Models\Category;
 use App\Services\HomeService;
 use App\Services\CategoryService;
 use App\Services\BrandService;

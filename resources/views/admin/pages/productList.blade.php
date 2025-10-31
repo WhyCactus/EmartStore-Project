@@ -16,7 +16,7 @@
                         <i class="fas fa-table me-1"></i>
                         Products
                     </div>
-                    <a href="{{ route('admin.create-product') }}" class="btn btn-primary">
+                    <a href="{{ route('admin.product.create-product') }}" class="btn btn-primary">
                         <i class="bi bi-plus-circle"></i>
                         New Product
                     </a>
@@ -66,7 +66,7 @@
                                         <a href="#" class="btn btn-primary">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a href="{{ route('admin.edit-product', $product->id) }}" class="btn btn-warning">
+                                        <a href="{{ route('admin.product.edit-product', $product->id) }}" class="btn btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
                                         <a href="#" class="btn btn-danger">

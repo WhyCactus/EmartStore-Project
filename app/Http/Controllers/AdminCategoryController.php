@@ -48,7 +48,7 @@ class AdminCategoryController extends Controller
             }
 
             $this->categoryService->createCategory($data);
-            return redirect()->route('admin.categories')->with('success', 'Category added successfully!');
+            return redirect()->route('admin.category.categories')->with('success', 'Category added successfully!');
         } catch (\Exception $e) {
             return redirect()
                 ->back()
@@ -63,7 +63,7 @@ class AdminCategoryController extends Controller
             $category = $this->categoryService->getCategoryById($id);
             return view('admin.pages.editCategory', compact('category'));
         } catch (\Exception $e) {
-            return redirect()->route('admin.categories')->with('error', 'Category not found!');
+            return redirect()->route('admin.category.categories')->with('error', 'Category not found!');
         }
     }
 
@@ -77,12 +77,22 @@ class AdminCategoryController extends Controller
             }
 
             $this->categoryService->updateCategory($id, $data);
-            return redirect()->route('admin.categories')->with('success', 'Category updated successfully!');
+            return redirect()->route('admin.category.categories')->with('success', 'Category updated successfully!');
         } catch (\Exception $e) {
             return redirect()
                 ->back()
                 ->with('error', 'Error updating category: ' . $e->getMessage())
                 ->withInput();
+        }
+    }
+
+    public function toggleStatus($id)
+    {
+        try {
+            $this->categoryService->toggleStatus($id);
+            return redirect()->back()->with('success', 'Change Status Success');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Server Error');
         }
     }
 }

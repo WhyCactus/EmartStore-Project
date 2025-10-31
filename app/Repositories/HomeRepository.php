@@ -30,6 +30,7 @@ class HomeRepository
     public function getCategories()
     {
         return Category::withCount('products')
+            ->where('status', 'active')
             ->limit(6)
             ->get();
     }
