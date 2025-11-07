@@ -30,12 +30,11 @@ class SendPendingOrdersNotification extends Command
     public function handle()
     {
         $pendingOrders = Order::where('order_status', 'pending')
-            ->where('created_at', '>=', Carbon::now()->subDay())
             ->with(['user', 'orderDetails.product'])
             ->get();
 
         if ($pendingOrders->isEmpty()) {
-            $this->info('No pending orders found in the last 24 hours.');
+            $this->info('No pending orders found.');
             return 0;
         }
 

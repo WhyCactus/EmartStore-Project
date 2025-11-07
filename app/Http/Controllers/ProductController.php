@@ -24,7 +24,7 @@ class ProductController extends Controller
         try {
             $product = $this->productService->getProductByIdWithRelations($id, ['brand', 'category']);
             $relatedProducts = $this->productService->getRelatedProducts($product->id);
-            return view('pages.product-detail', compact('product', 'relatedProducts'));
+            return view('client.pages.product-detail', compact('product', 'relatedProducts'));
         } catch (\Throwable $e) {
             return redirect()->route('home')->with('error', $e->getMessage());
         }

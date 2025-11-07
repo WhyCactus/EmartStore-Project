@@ -22,7 +22,7 @@ class CheckOutController extends Controller
             if ($checkOutData['totalItems'] === 0) {
                 return redirect()->route('cart.list')->with('error', 'Your cart is empty!');
             }
-            return view('pages.checkout', $checkOutData);
+            return view('client.pages.checkout', $checkOutData);
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -49,7 +49,7 @@ class CheckOutController extends Controller
             ->where('order_code', $orderCode)
             ->firstOrFail();
 
-        return view('pages.checkout-success', compact('order'));
+        return view('client.pages.checkout-success', compact('order'));
     }
 
     /**

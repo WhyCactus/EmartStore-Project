@@ -16,7 +16,10 @@
                     Users
                 </div>
                 <div class="card-body">
-                    <table id="datatablesSimple">
+                    <div class="">
+                        
+                    </div>
+                    <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -61,7 +64,3 @@
         </div>
     </main>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
-@endpush

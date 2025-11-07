@@ -82,7 +82,7 @@
                 <tbody>
                     @foreach ($pendingOrder as $order)
                         <tr>
-                            <td><strong>{{ $order->id }}</strong></td>
+                            <td><strong>{{ $order->order_code }}</strong></td>
                             <td>{{ $order->user->username }}<br><small>{{ $order->user->email }}</small></td>
                             <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                             <td>{{ $order->orderDetails->sum('quantity') }}</td>

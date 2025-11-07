@@ -19,7 +19,7 @@ class OrderController extends Controller
     {
         try {
             $orders = $this->orderRepository->getAuthUserOrders(10);
-            return view('pages.my-account', compact('orders'));
+            return view('client.pages.my-account', compact('orders'));
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -29,7 +29,7 @@ class OrderController extends Controller
     {
         try {
             $order = $this->orderRepository->getOrderById($id);
-            return view('pages.order-detail', compact('order'));
+            return view('client.pages.order-detail', compact('order'));
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Order Not Found');
         }

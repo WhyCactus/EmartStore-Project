@@ -26,7 +26,7 @@ class HomeController extends Controller
             $categories = $this->homeService->getCategories();
             $featuredProducts = $this->homeService->getFeaturedProducts();
             $recentProducts = $this->homeService->getRecentProducts();
-            return view('home.index', compact('featuredProducts', 'recentProducts', 'categories'));
+            return view('client.home.index', compact('featuredProducts', 'recentProducts', 'categories'));
         } catch (\Throwable $e) {
             return abort(404);
         }
@@ -39,7 +39,7 @@ class HomeController extends Controller
             $products = $this->homeService->getAllProducts($sort);
             $categories = $this->categoryService->getAllCategories();
             $brands = $this->brandService->getAllBrands();
-            return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+            return view('client.pages.product-list', compact('products', 'categories', 'brands', 'sort'));
         } catch (\Throwable $e) {
             return redirect()
                 ->route('home')
@@ -54,7 +54,7 @@ class HomeController extends Controller
             $products = $this->homeService->getProductsByCategory($categoryId, $sort);
             $categories = $this->categoryService->getAllCategories();
             $brands = $this->brandService->getAllBrands();
-            return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+            return view('client.pages.product-list', compact('products', 'categories', 'brands', 'sort'));
         } catch (\Throwable $e) {
             return redirect()
                 ->route('home')
@@ -69,7 +69,7 @@ class HomeController extends Controller
             $products = $this->homeService->getProductsByBrand($brandId, $sort);
             $categories = $this->categoryService->getAllCategories();
             $brands = $this->brandService->getAllBrands();
-            return view('pages.product-list', compact('products', 'categories', 'brands', 'sort'));
+            return view('client.pages.product-list', compact('products', 'categories', 'brands', 'sort'));
         } catch (\Throwable $e) {
             return redirect()
                 ->route('home')

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('client.layouts.app')
 
 @section('title', 'Forgot Password - E Shop')
 

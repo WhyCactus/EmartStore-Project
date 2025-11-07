@@ -18,13 +18,13 @@
             <div class="col-md-3">
                 <div class="user">
                     <div class="dropdown">
-                        <div class="bell gap-5">
-                            <a href="#"><i class="fa fa-bell"></i></a>
-                        </div>
-                        <div class="cart">
-                            <a href="{{ route('cart.list') }}"><i class="fa fa-cart-plus"></i></a>
-                        </div>
                         @auth()
+                            <div class="bell gap-5">
+                                <a href="#"><i class="fa fa-bell"></i></a>
+                            </div>
+                            <div class="cart">
+                                <a href="{{ route('cart.list') }}"><i class="fa fa-cart-plus"></i></a>
+                            </div>
                             <a href="#" class="dropdown-toggle"
                                 data-toggle="dropdown">{{ Auth::user()->username }}</a>
                             <div class="dropdown-menu">

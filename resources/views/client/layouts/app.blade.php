@@ -26,19 +26,19 @@
 
 <body>
     <!-- Top Header -->
-    @include('partials.top-header')
+    @include('client.partials.top-header')
 
     <!-- Header -->
-    @include('partials.main-header')
+    @include('client.partials.main-header')
 
     <!-- Main Content -->
     @yield('content')
 
     <!-- Footer -->
-    @include('layouts.footer')
+    @include('client.layouts.footer')
 
     <!-- Scripts -->
-    @include('layouts.scripts')
+    @include('client.layouts.scripts')
 </body>
 
 </html>

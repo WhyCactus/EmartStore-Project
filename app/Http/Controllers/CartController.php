@@ -30,7 +30,7 @@ class CartController extends Controller
         $cart->items = collect();
     }
 
-        return view('pages.cart', compact('cart'));
+        return view('client.pages.cart', compact('cart'));
     }
 
     public function addItem(Request $request)
