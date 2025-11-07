@@ -50,11 +50,14 @@ class AdminProductController extends Controller
 
     public function edit($id)
     {
-        $product = $this->productService->getProductByIdWithRelations($id, ['brand', 'category']);
-        $categories = Category::withCount('products')->get();
-        $brands = Brand::withCount('products')->get();
-
-        return view('admin.pages.editProduct', compact('product', 'categories', 'brands'));
+        try {
+            $product = $this->productService->getProductByIdWithRelations($id, ['brand', 'category']);
+            $categories = Category::withCount('products')->get();
+            $brands = Brand::withCount('products')->get();
+            return view('admin.pages.editProduct', compact('product', 'categories', 'brands'));
+        } catch (\Exception $e) {
+            abort(404, $e->getMessage());
+        }
     }
 
     public function update(ProductRequest $request, $id)

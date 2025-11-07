@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Constants\CommonStatus;
 use App\Models\Brand;
 use App\Repositories\BrandRepositoryInterface;
 
@@ -46,10 +47,10 @@ class BrandRepository implements BrandRepositoryInterface
     {
         $brand = $this->getById($id);
 
-        if ($brand->status === 'active') {
-            $brand->status = 'inactive';
+        if ($brand->status === CommonStatus::ACTIVE) {
+            $brand->status = CommonStatus::INACTIVE;
         } else {
-            $brand->status = 'active';
+            $brand->status = CommonStatus::ACTIVE;
         }
 
         $brand->save();

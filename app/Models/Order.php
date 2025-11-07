@@ -45,4 +45,9 @@ class Order extends Model
     {
         return 'ORDER-' . date('Ymd') . '-' . str_pad($this->count() + 1, 4, '0', STR_PAD_LEFT);
     }
+
+    public function scopePending($query)
+    {
+        return $query->where('order_status', 'pending');
+    }
 }

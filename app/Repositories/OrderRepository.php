@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Constants\OrderStatus;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\Paginator;
@@ -96,11 +97,11 @@ class OrderRepository implements OrderRepositoryInterface
     {
         $data = ['order_status' => $status];
 
-        if ($status === 'cancelled') {
+        if ($status === OrderStatus::CANCELLED) {
             $data['cancelled_at'] = Carbon::now();
         }
 
-        if ($status === 'delivered') {
+        if ($status === OrderStatus::DELIVERED) {
             $data['payment_status'] = 'paid';
         }
 

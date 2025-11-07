@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Constants\CommonStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -80,10 +81,10 @@ class UserRepository
     {
         $user = $this->getById($id);
 
-        if ($user->status === 'active') {
-            $user->status = 'inactive';
+        if ($user->status === CommonStatus::ACTIVE) {
+            $user->status = CommonStatus::INACTIVE;
         } else {
-            $user->status = 'active';
+            $user->status = CommonStatus::ACTIVE;
         }
 
         $user->save();

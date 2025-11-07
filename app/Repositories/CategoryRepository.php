@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Constants\CommonStatus;
 use App\Models\Category;
 use App\Repositories\CategoryRepositoryInterface;
 
@@ -46,10 +47,10 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         $category = $this->getById($id);
 
-        if ($category->status === 'active') {
-            $category->status = 'inactive';
+        if ($category->status === CommonStatus::ACTIVE) {
+            $category->status = CommonStatus::INACTIVE;
         } else {
-            $category->status = 'active';
+            $category->status = CommonStatus::ACTIVE;
         }
 
         $category->save();

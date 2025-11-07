@@ -47,8 +47,8 @@ class SendPendingOrdersNotification extends Command
         try {
             Mail::to($adminEmail)->send(new PendingOrdersNotification(
                 $pendingOrders,
-                $totalPending,
-                $totalRevenue
+                $totalRevenue,
+                $totalPending
             ));
 
             $this->info("Successfully send Email. Order: {$totalPending}, Revenue {$totalRevenue}");

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Constants\UserRole;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class RegularUserMiddleware
             return redirect()->route('login');
         }
 
-        if (Auth::user()->role_id === 1 || Auth::user()->role_id === 2) {
+        if (Auth::user()->role_id === UserRole::ADMIN || Auth::user()->role_id === UserRole::USER) {
             return $next($request);
         }
 

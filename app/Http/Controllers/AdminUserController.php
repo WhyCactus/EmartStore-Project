@@ -31,7 +31,7 @@ class AdminUserController extends Controller
             $this->userService->changeStatus($id);
             return redirect()->back()->with('success','Change Status Success');
         } catch (\Throwable $e) {
-            return redirect()->back()->with('error', 'Server Error');
+            return redirect()->back()->with('error', 'Server Error' . $e->getMessage());
         }
     }
 }
