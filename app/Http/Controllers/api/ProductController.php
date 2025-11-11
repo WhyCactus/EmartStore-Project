@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Http\Resources\Product as ProductResource;
 
 class ProductController extends Controller
 {
@@ -13,23 +15,46 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        try {
+            $products = Product::all();
+            return ProductResource::collection($products);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+            ], 500);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        try {
+            $product = Product::create($request->all());
+            return new ProductResource($product);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Product $product)
     {
-        //
+        try {
+            return new ProductResource($product);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found',
+            ], 404);
+        }
     }
 
     /**
@@ -37,7 +62,16 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $product = Product::findOrFail($id);
+            $product->update($request->all());
+            return new ProductResource($product);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong',
+            ], 500);
+        }
     }
 
     /**
@@ -45,6 +79,23 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $product = Product::findOrFail($id);
+            $product->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Product deleted successfully'
+            ], 200);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found'
+            ], 404);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong'
+            ], 500);
+        }
     }
 }
