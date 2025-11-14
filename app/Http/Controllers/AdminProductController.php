@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Services\ProductService;
@@ -40,7 +41,7 @@ class AdminProductController extends Controller
     {
         try {
             $this->productService->createProduct($request->all());
-            return redirect()->route('admin.products')->with('success', 'Add product successfully!');
+            return redirect()->route('admin.product.products')->with('success', 'Add product successfully!');
         } catch (\Exception $e) {
             return redirect()
                 ->back()
@@ -51,7 +52,7 @@ class AdminProductController extends Controller
     public function edit($id)
     {
         try {
-            $product = $this->productService->getProductByIdWithRelations($id, ['brand', 'category']);
+            $product = $this->productService->getProductByIdWithRelations($id, ['brand', 'category', 'productVariants', 'productVariants.attributes', 'productVariants.attributes.attribute']);
             $categories = Category::withCount('products')->get();
             $brands = Brand::withCount('products')->get();
             return view('admin.pages.editProduct', compact('product', 'categories', 'brands'));
@@ -60,21 +61,87 @@ class AdminProductController extends Controller
         }
     }
 
-    public function update(ProductRequest $request, $id)
+    public function update(EditProductRequest $request, $id)
     {
         try {
-            $data = $request->only(['product_name', 'product_code', 'original_price', 'discounted_price', 'quantity_in_stock', 'description', 'category_id', 'brand_id']);
-
-            if ($request->hasFile('image') && $request->file('image')->isValid()) {
-                $data['image'] = $request->file('image');
-            }
+            $data = $this->prepareProductData($request);
 
             $this->productService->updateProduct($id, $data);
-            return redirect()->route('admin.products')->with('success', 'Update product successfully!');
+
+            return redirect()
+                ->route('admin.product.products')
+                ->with('success', 'Update product successfully!');
         } catch (\Exception $e) {
             return redirect()
                 ->back()
+                ->withInput()
                 ->with('error', 'Error updating product: ' . $e->getMessage());
+        }
+    }
+
+    private function prepareProductData($request)
+    {
+        $data = $request->only([
+            'product_name',
+            'sku',
+            'original_price',
+            'discounted_price',
+            'quantity_in_stock',
+            'description',
+            'category_id',
+            'brand_id',
+            'product_type'
+        ]);
+
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $data['image'] = $request->file('image');
+        }
+
+        if ($request->has('variants') && is_array($request->variants)) {
+            $data['variants'] = $this->prepareVariantsData($request);
+        }
+
+        return $data;
+    }
+
+    private function prepareVariantsData($request)
+    {
+        $variants = [];
+
+        foreach ($request->variants as $index => $variant) {
+            $variantData = [
+                'id' => $variant['id'] ?? null,
+                'sku' => $variant['sku'],
+                'price' => $variant['price'],
+                'quantity_in_stock' => $variant['quantity_in_stock'],
+            ];
+
+            if ($request->hasFile("variants.{$index}.image")) {
+                $variantImage = $request->file("variants.{$index}.image");
+                if ($variantImage->isValid()) {
+                    $variantData['image'] = $variantImage;
+                }
+            }
+
+            if (isset($variant['attributes']) && is_array($variant['attributes'])) {
+                $variantData['attributes'] = $variant['attributes'];
+            }
+
+            $variants[] = $variantData;
+        }
+
+        return $variants;
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $this->productService->deleteProduct($id);
+            return redirect()->route('admin.product.products')->with('success', 'Product deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error deleting product: ' . $e->getMessage());
         }
     }
 }

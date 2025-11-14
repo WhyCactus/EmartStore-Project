@@ -8,10 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Attribute extends Model
 {
     protected $fillable = [
-        'variant_id',
-        'attribute_name',
-        'attribute_value',
-    ] ;
+        'name',
+        'value',
+    ];
 
     public function variants()
     {

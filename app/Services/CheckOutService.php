@@ -56,7 +56,7 @@ class CheckOutService
 
                     $snapshotPrice = $item->unit_price ?? ($product->price ?? 0);
                     $snapshotName = $product->product_name ?? 'Unknown Product';
-                    $snapshotSku = $product->product_code ?? 'N/A';
+                    $snapshotSku = $product->sku ?? 'N/A';
 
                     return [
                         'product_id' => $item->product_id,

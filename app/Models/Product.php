@@ -13,7 +13,7 @@ class Product extends Model
 
     protected $fillable = [
         'product_name',
-        'product_code',
+        'sku',
         'image',
         'description',
         'original_price',
@@ -30,6 +30,13 @@ class Product extends Model
         'updated_at'=> 'datetime',
         'created_at'=> 'datetime',
     ];
+
+    protected $with = ['productVariants'];
+
+    public function productVariants(): HasMany
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 
     public function brand(): BelongsTo
     {

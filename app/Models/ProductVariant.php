@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductVariant extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
         'product_id',
         'sku',
@@ -26,7 +29,7 @@ class ProductVariant extends Model
 
     public function attributes()
     {
-        return $this->hasMany(Attribute::class, 'variant_id');
+        return $this->hasMany(VariantAttributes::class, 'product_variant_id');
     }
 
     public function getAttributesMapAttribute()

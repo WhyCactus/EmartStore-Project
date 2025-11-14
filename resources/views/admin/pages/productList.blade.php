@@ -42,7 +42,7 @@
                             @foreach ($products as $product)
                                 <tr>
                                     <td>{{ $product->id }}</td>
-                                    <td>{{ $product->product_code }}</td>
+                                    <td>{{ $product->sku }}</td>
                                     <td>{{ $product->product_name }}</td>
                                     <td>
                                         <img src="{{ asset('storage/' . $product->image) }}" alt="" width="50px"
@@ -66,12 +66,19 @@
                                         <a href="#" class="btn btn-primary">
                                             <i class="bi bi-eye"></i>
                                         </a>
-                                        <a href="{{ route('admin.product.edit-product', $product->id) }}" class="btn btn-warning">
+                                        <a href="{{ route('admin.product.edit-product', $product->id) }}"
+                                            class="btn btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <a href="#" class="btn btn-danger">
-                                            <i class="bi bi-dash-circle"></i>
-                                        </a>
+                                        <form action="{{ route('admin.product.delete-product', $product->id) }}"
+                                            method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this product?');">
+                                                <i class="bi bi-dash-circle"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

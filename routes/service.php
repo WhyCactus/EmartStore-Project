@@ -23,6 +23,7 @@ Route::middleware(['auth', 'role'])->group(function () {
         Route::post('/create-product', [AdminProductController::class, 'store'])->name('store-product');
         Route::get('/edit-product/{id}', [AdminProductController::class, 'edit'])->name('edit-product');
         Route::put('/edit-product/{id}', [AdminProductController::class, 'update'])->name('update-product');
+        Route::delete('/delete-product/{id}', [AdminProductController::class, 'destroy'])->name('delete-product');
     });
 
     //CATEGORY

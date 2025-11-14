@@ -61,7 +61,7 @@
                                 @endif
 
                                 <div class="product-meta mt-3">
-                                    <p><strong>SKU:</strong> {{ $product->product_code }}</p>
+                                    <p><strong>SKU:</strong> {{ $product->sku }}</p>
                                     <p><strong>Category:</strong> {{ $product->category->category_name ?? 'N/A' }}</p>
                                     <p><strong>Brand:</strong> {{ $product->brand->brand_name ?? 'N/A' }}</p>
                                     <p><strong>Availability:</strong>
@@ -102,7 +102,7 @@
                                     <ul>
                                         <li><strong>Brand:</strong> {{ $product->brand->brand_name ?? 'N/A' }}</li>
                                         <li><strong>Model:</strong> {{ $product->product_name }}</li>
-                                        <li><strong>SKU:</strong> {{ $product->product_code }}</li>
+                                        <li><strong>SKU:</strong> {{ $product->sku }}</li>
                                         <li>
                                             <strong>Category:</strong> {{ $product->category->category_name ?? 'N/A' }}
                                         </li>

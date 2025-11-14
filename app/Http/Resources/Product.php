@@ -18,7 +18,7 @@ class Product extends JsonResource
             "id"=> $this->id,
             "image"=> $this->image,
             "name"=> $this->product_name,
-            "sku"=> $this->product_code,
+            "sku"=> $this->sku,
             "original_price"=> $this->original_price,
             "discounted_price"=> $this->discounted_price,
             "quantity_in_stock"=> $this->quantity_in_stock,

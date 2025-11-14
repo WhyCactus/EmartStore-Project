@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
         $products = [
             [
                 'product_name' => 'Iphone 13',
-                'product_code' => 'IP13',
+                'sku' => 'IP13',
                 'image' => 'products/iphone-13.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 650,
@@ -32,7 +32,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Iphone 14',
-                'product_code' => 'IP14',
+                'sku' => 'IP14',
                 'image' => 'products/iphone-14.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 700,
@@ -47,7 +47,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Iphone 15',
-                'product_code' => 'IP15',
+                'sku' => 'IP15',
                 'image' => 'products/iphone-15.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 950,
@@ -62,7 +62,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Iphone 16',
-                'product_code' => 'IP16',
+                'sku' => 'IP16',
                 'image' => 'products/iphone-16.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 1000,
@@ -77,7 +77,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Samsung S21',
-                'product_code' => 'SS21',
+                'sku' => 'SS21',
                 'image' => 'products/samsung-s21.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 700,
@@ -92,7 +92,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Samsung S22',
-                'product_code' => 'SS22',
+                'sku' => 'SS22',
                 'image' => 'products/samsung-s22.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 850,
@@ -107,7 +107,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Apple Watch Series 10',
-                'product_code' => 'AW10',
+                'sku' => 'AW10',
                 'image' => 'products/apple-watch-series-10.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 450,
@@ -122,7 +122,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Ipad A16',
-                'product_code' => 'IPA16',
+                'sku' => 'IPA16',
                 'image' => 'products/ipad-a16.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 550,
@@ -137,7 +137,7 @@ class ProductSeeder extends Seeder
             ],
             [
                 'product_name' => 'Macbook Air M2',
-                'product_code' => 'MBM2',
+                'sku' => 'MBM2',
                 'image' => 'products/mac-air-m2.jpg',
                 'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, natus.',
                 'original_price' => 800,
