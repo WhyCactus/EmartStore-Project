@@ -22,7 +22,13 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = $this->productService->getProductByIdWithRelations($id, ['brand', 'category']);
+            $product = $this->productService->getProductByIdWithRelations($id, [
+                'brand',
+                'category',
+                'productVariants',
+                'productVariants.attributes',
+                'productVariants.attributes.attribute'
+            ]);
             $relatedProducts = $this->productService->getRelatedProducts($product->id);
             return view('client.pages.product-detail', compact('product', 'relatedProducts'));
         } catch (\Throwable $e) {

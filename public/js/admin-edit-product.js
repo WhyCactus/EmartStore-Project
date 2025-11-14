@@ -3,30 +3,37 @@ function toggleSections() {
     const variantsSection = document.getElementById('variants-section');
 
     if (hasVariants) {
-        singleProductSection.style.display = 'none';
-        singleProductSection.querySelectorAll('input, select, textarea').forEach(field => {
-            field.disabled = true;
-        });
+        if (singleProductSection) {
+            singleProductSection.style.display = 'none';
+            singleProductSection.querySelectorAll('input, select, textarea').forEach(field => {
+                field.disabled = true;
+            });
+        }
 
-        variantsSection.style.display = 'block';
-        variantsSection.querySelectorAll('input, select, textarea').forEach(field => {
-            field.disabled = false;
-        });
+        if (variantsSection) {
+            variantsSection.style.display = 'block';
+            variantsSection.querySelectorAll('input, select, textarea').forEach(field => {
+                field.disabled = false;
+            });
+        }
     } else {
-        singleProductSection.style.display = 'block';
-        singleProductSection.querySelectorAll('input, select, textarea').forEach(field => {
-            field.disabled = false;
-        });
+        if (singleProductSection) {
+            singleProductSection.style.display = 'block';
+            singleProductSection.querySelectorAll('input, select, textarea').forEach(field => {
+                field.disabled = false;
+            });
+        }
 
-        variantsSection.style.display = 'none';
-        variantsSection.querySelectorAll('input, select, textarea').forEach(field => {
-            field.disabled = true;
-        });
+        if (variantsSection) {
+            variantsSection.style.display = 'none';
+            variantsSection.querySelectorAll('input, select, textarea').forEach(field => {
+                field.disabled = true;
+            });
+        }
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM Content Loaded');
     toggleSections();
     attachRemoveListeners();
 });

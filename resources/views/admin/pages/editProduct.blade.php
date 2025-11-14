@@ -128,7 +128,7 @@
 
                         <!-- Product Variants Section -->
                         <div class="row">
-                            <div id="variants-section" class="col-md-12 mt-4" style="display: none;">
+                            <div id="variants-section" class="col-md-12 mt-4">
                                 <h5 class="mb-3">Product Variants</h5>
                                 <div id="variants-container">
                                     @forelse($product->productVariants ?? [] as $variant)
@@ -328,9 +328,10 @@
         </div>
     </main>
 
-    <script src="{{ asset('js/admin-edit-product.js') }}">
+    <script>
         let variantCount = {{ count($product->productVariants ?? []) }};
         let attributeCount = {};
         const hasVariants = {{ count($product->productVariants ?? []) > 0 ? 'true' : 'false' }};
     </script>
+    <script src="{{ asset('js/admin-edit-product.js') }}"></script>
 @endsection
