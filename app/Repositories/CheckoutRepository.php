@@ -45,6 +45,7 @@ class CheckoutRepository implements CheckOutRepositoryInterface
                 'snapshot_product_name' => $item['snapshot_product_name'] ?? 'Unknown',
                 'snapshot_product_sku' => $item['snapshot_product_sku'] ?? 'N/A',
                 'snapshot_product_price' => (float) ($item['snapshot_product_price'] ?? 0),
+                'snapshot_variant_attributes' => $item['snapshot_variant_attributes'] ?? null,
                 'quantity' => (int) ($item['quantity'] ?? 0),
                 'unit_price' => (float) ($item['unit_price'] ?? 0),
                 'total_price' => (float) ($item['total_price'] ?? 0),

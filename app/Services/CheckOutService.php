@@ -58,12 +58,23 @@ class CheckOutService
                     $snapshotName = $product->product_name ?? 'Unknown Product';
                     $snapshotSku = $product->sku ?? 'N/A';
 
+                    $variantAttributes = null;
+                    if ($item->productVariant && $item->productVariant->attributes) {
+                        $variantAttributes = $item->productVariant->attributes->map(function ($attr) {
+                            return [
+                                'name' => $attr->attribute->attribute_name ?? 'Attribute',
+                                'value' => $attr->value
+                            ];
+                        })->toArray();
+                    }
+
                     return [
                         'product_id' => $item->product_id,
                         'product_variant_id' => $item->product_variant_id,
                         'snapshot_product_name' => $snapshotName,
                         'snapshot_product_sku' => $snapshotSku,
                         'snapshot_product_price' => (float) $snapshotPrice,
+                        'snapshot_variant_attributes' => $variantAttributes ? json_encode($variantAttributes) : null,
                         'quantity' => (int) $item->quantity,
                         'unit_price' => (float) ($item->unit_price ?? 0),
                         'total_price' => (float) ($item->total_price ?? 0),

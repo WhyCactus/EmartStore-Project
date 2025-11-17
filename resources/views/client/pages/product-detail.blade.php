@@ -26,13 +26,55 @@
                                     <span class="ml-2">({{ $product->rating_count }} reviews)</span>
                                 </div>
                                 <div class="price">
-                                    @if ($product->discounted_price && $product->discounted_price < $product->original_price)
-                                        ${{ number_format($product->discounted_price, 2) }}
-                                        <span>${{ number_format($product->original_price, 2) }}</span>
-                                    @else
-                                        ${{ number_format($product->original_price, 2) }}
-                                    @endif
+                                    <span id="display-price">
+                                        @if ($product->discounted_price && $product->discounted_price < $product->original_price)
+                                            ${{ number_format($product->discounted_price, 2) }}
+                                            <span>${{ number_format($product->original_price, 2) }}</span>
+                                        @else
+                                            <span style="text-decoration: none !important">${{ number_format($product->original_price, 2) }}</span>
+                                        @endif
+                                    </span>
                                 </div>
+
+                                @if ($product->productVariants && $product->productVariants->count() > 0)
+                                    <div class="product-variants mb-3">
+                                        <h4>Available Variants:</h4>
+                                        <div class="row">
+                                            @foreach ($product->productVariants as $variant)
+                                                @if ($variant->status == 'active')
+                                                    <div class="col-md-6 col-lg-4 mb-3">
+                                                        <div class="variant-card" data-variant-id="{{ $variant->id }}"
+                                                            data-variant-price="{{ $variant->price }}"
+                                                            data-variant-stock="{{ $variant->quantity_in_stock }}"
+                                                            style="border: 2px solid #ddd; padding: 15px; border-radius: 5px; cursor: pointer; transition: all 0.3s;">
+                                                            <div class="variant-info">
+                                                                @foreach ($variant->attributes as $attr)
+                                                                    <p class="mb-1">
+                                                                        <strong>{{ $attr->attribute->attribute_name ?? 'Attribute' }}:</strong>
+                                                                        {{ $attr->value }}
+                                                                    </p>
+                                                                @endforeach
+                                                                <p class="mb-1"><strong>Price:</strong>
+                                                                    ${{ number_format($variant->price, 2) }}</p>
+                                                                <p class="mb-0">
+                                                                    <strong>Stock:</strong>
+                                                                    @if ($variant->quantity_in_stock > 0)
+                                                                        <span
+                                                                            class="text-success">{{ $variant->quantity_in_stock }}
+                                                                            available</span>
+                                                                    @else
+                                                                        <span class="text-danger">Out of Stock</span>
+                                                                    @endif
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+
                                 <div class="quantity">
                                     <h4>Quantity:</h4>
                                     <div class="qty">
@@ -42,13 +84,20 @@
                                     </div>
                                 </div>
 
-                                @if ($product->quantity_in_stock > 0)
+                                @if (
+                                    $product->quantity_in_stock > 0 ||
+                                        ($product->productVariants &&
+                                            $product->productVariants->where('status', 1)->where('quantity_in_stock', '>', 0)->count() > 0))
                                     <div class="action">
-                                        <form action="{{ route('cart.addItem') }}" method="POST" class="d-inline">
+                                        <form action="{{ route('cart.addItem') }}" method="POST" class="d-inline"
+                                            id="add-to-cart-form">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" name="unit_price" value="{{ $product->current_price }}">
-                                            <input type="hidden" name="quantity" value="1">
+                                            <input type="hidden" name="product_variant_id" id="selected-variant-id"
+                                                value="">
+                                            <input type="hidden" name="unit_price" id="selected-price"
+                                                value="{{ $product->discounted_price ?? $product->original_price }}">
+                                            <input type="hidden" name="quantity" id="form-quantity" value="1">
                                             <button type="submit" class="btn btn-link">
                                                 <i class="fa fa-cart-plus"></i> Add to Cart
                                             </button>

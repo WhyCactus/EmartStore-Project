@@ -50,6 +50,13 @@
                                                     <div>
                                                         <div class="fw-medium">{{ $orderDetail->snapshot_product_name }}
                                                         </div>
+                                                        @if ($orderDetail->variant_attributes)
+                                                            <small class="text-muted d-block">
+                                                                @foreach ($orderDetail->variant_attributes as $attr)
+                                                                    <span class="badge bg-light text-dark me-1">{{ $attr['name'] }}: {{ $attr['value'] }}</span>
+                                                                @endforeach
+                                                            </small>
+                                                        @endif
                                                         <small class="text-muted">SKU:
                                                             {{ $orderDetail->snapshot_product_sku ?? 'N/A' }}</small>
                                                     </div>

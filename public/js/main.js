@@ -305,6 +305,94 @@ document.querySelectorAll('.rating-star').forEach(star => {
     });
 });
 
+// Product Variant Selection
+document.addEventListener('DOMContentLoaded', function() {
+    const variantCards = document.querySelectorAll('.variant-card');
+    const selectedPriceInput = document.getElementById('selected-price');
+    const selectedVariantIdInput = document.getElementById('selected-variant-id');
+    const displayPrice = document.getElementById('display-price');
+    const quantityInput = document.getElementById('quantity');
+    const formQuantityInput = document.getElementById('form-quantity');
+
+    // Sync quantity between display and form
+    if (quantityInput && formQuantityInput) {
+        quantityInput.addEventListener('input', function() {
+            formQuantityInput.value = this.value;
+        });
+    }
+
+    // Handle variant card selection
+    variantCards.forEach(card => {
+        card.addEventListener('click', function() {
+            // Remove selection from all cards
+            variantCards.forEach(c => {
+                c.style.borderColor = '#ddd';
+                c.style.backgroundColor = 'white';
+            });
+
+            // Highlight selected card
+            this.style.borderColor = '#ff6f61';
+            this.style.backgroundColor = '#fff5f5';
+
+            // Get variant data
+            const variantId = this.getAttribute('data-variant-id');
+            const variantPrice = this.getAttribute('data-variant-price');
+            const variantStock = this.getAttribute('data-variant-stock');
+
+            // Update form inputs
+            if (selectedVariantIdInput) {
+                selectedVariantIdInput.value = variantId;
+            }
+            if (selectedPriceInput) {
+                selectedPriceInput.value = variantPrice;
+            }
+
+            // Update displayed price
+            if (displayPrice) {
+                displayPrice.innerHTML = '$' + parseFloat(variantPrice).toFixed(2);
+            }
+
+            // Update quantity max based on stock
+            if (quantityInput && variantStock > 0) {
+                quantityInput.setAttribute('max', variantStock);
+                if (parseInt(quantityInput.value) > parseInt(variantStock)) {
+                    quantityInput.value = variantStock;
+                    formQuantityInput.value = variantStock;
+                }
+            }
+        });
+    });
+
+    // Quantity buttons for product detail page
+    const btnMinus = document.querySelector('.product-detail .btn-minus');
+    const btnPlus = document.querySelector('.product-detail .btn-plus');
+
+    if (btnMinus && quantityInput) {
+        btnMinus.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value) || 1;
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+                if (formQuantityInput) {
+                    formQuantityInput.value = currentValue - 1;
+                }
+            }
+        });
+    }
+
+    if (btnPlus && quantityInput) {
+        btnPlus.addEventListener('click', function() {
+            let currentValue = parseInt(quantityInput.value) || 1;
+            const maxQuantity = quantityInput.getAttribute('max');
+            if (!maxQuantity || currentValue < parseInt(maxQuantity)) {
+                quantityInput.value = currentValue + 1;
+                if (formQuantityInput) {
+                    formQuantityInput.value = currentValue + 1;
+                }
+            }
+        });
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     const shippingMethod = document.getElementById('shipping-method');
     const shippingCost = document.getElementById('shipping-cost');

@@ -13,6 +13,7 @@ class OrderDetail extends Model
         'snapshot_product_name',
         'snapshot_product_sku',
         'snapshot_product_price',
+        'snapshot_variant_attributes',
         'quantity',
         'unit_price',
         'total_price'];
@@ -38,5 +39,15 @@ class OrderDetail extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function productVariant()
+    {
+        return $this->belongsTo(ProductVariant::class);
+    }
+
+    public function getVariantAttributesAttribute()
+    {
+        return $this->snapshot_variant_attributes ? json_decode($this->snapshot_variant_attributes, true) : null;
     }
 }

@@ -39,6 +39,13 @@
                                                         <div>
                                                             <div class="fw-medium">{{ $orderDetail->snapshot_product_name }}
                                                             </div>
+                                                            @if ($orderDetail->variant_attributes)
+                                                                <small class="text-muted d-block">
+                                                                    @foreach ($orderDetail->variant_attributes as $attr)
+                                                                        <span class="badge bg-light text-dark me-1">{{ $attr['name'] }}: {{ $attr['value'] }}</span>
+                                                                    @endforeach
+                                                                </small>
+                                                            @endif
                                                             <small class="text-muted">SKU:
                                                                 {{ $orderDetail->snapshot_product_sku ?? 'N/A' }}</small>
                                                         </div>
@@ -76,10 +83,6 @@
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">Shipping:</span>
                                     <span>${{ number_format($order->orderShipping->shipping_cost, 2) }}</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Tax:</span>
-                                    <span>${{ number_format($order->tax_amount ?? 0, 2) }}</span>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between fw-bold total-amount">

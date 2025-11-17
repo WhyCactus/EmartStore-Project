@@ -24,9 +24,21 @@
                                 @if (count($cart->items) > 0)
                                     @foreach ($cart->items as $item)
                                         <tr>
-                                            <td><img src="{{ asset('storage/' . $item->product->image) }}" alt="Image">
+                                            <td>
+                                                <img src="{{ asset('storage/' . ($item->productVariant && $item->productVariant->image ? $item->productVariant->image : $item->product->image)) }}" alt="Image">
                                             </td>
-                                            <td><a href="#">{{ $item->product->product_name }}</a></td>
+                                            <td>
+                                                <a href="#">{{ $item->product->product_name }}</a>
+                                                @if ($item->productVariant)
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        @foreach ($item->productVariant->attributes as $attr)
+                                                            {{ $attr->attribute->attribute_name ?? 'Attribute' }}: {{ $attr->value }}
+                                                            @if (!$loop->last), @endif
+                                                        @endforeach
+                                                    </small>
+                                                @endif
+                                            </td>
                                             <td class="unit-price">${{ number_format($item->unit_price, 2) }}</td>
                                             <td>
                                                 <div class="qty">
