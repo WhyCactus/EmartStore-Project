@@ -3,10 +3,13 @@
 namespace App\Repositories;
 
 use App\Constants\OrderStatus;
+use App\Mail\DeliverySuccessfulNotification;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class OrderRepository implements OrderRepositoryInterface
 {
@@ -51,6 +54,15 @@ class OrderRepository implements OrderRepositoryInterface
 
         if (!$this->validateStatusTransition($order->order_status, $status)) {
             throw new \Exception("Invalid status transition from {$order->order_status} to {$status}");
+        }
+
+        if (OrderStatus::DELIVERED === $status) {
+            try {
+                Mail::to($order->user->email)
+                    ->send(new DeliverySuccessfulNotification($order));
+            } catch (\Throwable $e) {
+                Log::error($e->getMessage());
+            }
         }
 
         $updateData = $this->prepareStatusUpdateData($order, $status);

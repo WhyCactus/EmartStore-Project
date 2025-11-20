@@ -1,34 +1,69 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layouts.app')
 
-<head>
-    <title>Password Reset</title>
-</head>
+@section('title', 'Password Reset')
+@section('header-class', 'pink')
 
-<body>
-    <h2>Hello!</h2>
+@section('icon', '🔐')
+@section('header-title', 'Password Reset Request')
+@section('header-subtitle', 'Reset your password securely')
+
+@section('header')
+    @include('emails.layouts.header')
+@endsection
+
+@section('content')
+    <p>Hello!</p>
 
     <p>You are receiving this email because we received a password reset request for your account.</p>
 
-    <p>
-        <a href="{{ $resetUrl }}"
-            style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+    <div class="alert-box">
+        <p>
+            <strong>⏱️ Time Sensitive:</strong> This password reset link will expire in 60 minutes.
+        </p>
+    </div>
+
+    <div class="text-center m-30-0">
+        <a href="{{ $resetUrl }}" class="button pink">
             Reset Password
         </a>
+    </div>
+
+    <div class="warning-box">
+        <p>
+            <strong>⚠️ Security Notice:</strong><br>
+            If you did not request a password reset, please ignore this email. Your password will remain unchanged and no further action is required.
+        </p>
+    </div>
+
+    <div class="info-box">
+        <h3>What happens next?</h3>
+        <p class="with-margin">
+            <strong>1.</strong> Click the "Reset Password" button above<br>
+            <strong>2.</strong> Enter your new password<br>
+            <strong>3.</strong> Confirm the change<br>
+            <strong>4.</strong> Log in with your new password
+        </p>
+    </div>
+
+    <div class="link-box">
+        <p>
+            Having trouble clicking the button? Copy and paste this URL into your browser:
+        </p>
+        {{ $resetUrl }}
+    </div>
+
+    <p class="mt-30">
+        If you have any questions or concerns, please don't hesitate to contact our support team.
     </p>
 
-    <p>This password reset link will expire in 60 minutes.</p>
-
-    <p>If you did not request a password reset, no further action is required.</p>
-
-    <p>Regards,<br>{{ config('app.name') }}</p>
-
-    <hr>
-    <p style="color: #666; font-size: 12px;">
-        If you're having trouble clicking the "Reset Password" button, copy and paste the URL below into your web
-        browser:
-        <br>{{ $resetUrl }}
+    <p>
+        Best regards,<br>
+        <strong>The Emart Team</strong>
     </p>
-</body>
+@endsection
 
-</html>
+@section('footer')
+    @include('emails.layouts.footer')
+@endsection
+
+@section('footer-subtitle', 'Your account security is our priority')

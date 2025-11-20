@@ -2,14 +2,17 @@
 
 namespace App\Services;
 
-use App\Http\Requests\CheckOutRequest;
+use App\Mail\PurchaseSuccessNotification;
 use App\Repositories\CartRepositoryInterface;
 use App\Repositories\CheckOutRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CheckOutService
 {
-    public function __construct(private CartRepositoryInterface $cartRepository, private CheckOutRepositoryInterface $orderRepository) {}
+    public function __construct(private CartRepositoryInterface $cartRepository, private CheckOutRepositoryInterface $orderRepository)
+    {
+    }
 
     public function getCheckOutData($userId)
     {
@@ -91,6 +94,15 @@ class CheckOutService
             ]);
 
             $this->cartRepository->clearCart($cart->id);
+
+            $order->load(['user', 'orderDetails', 'orderShipping']);
+
+            try {
+                Mail::to($order->user->email)
+                    ->send(new PurchaseSuccessNotification($order));
+            } catch (\Exception $e) {
+                throw new \Exception('Email sending failed.');
+            }
 
             return $order;
         });

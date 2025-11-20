@@ -1,109 +1,89 @@
-<!DOCTYPE html>
-<html>
+@extends('emails.layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <title>Pending Order</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
+@section('title', 'Pending Orders Report')
+@section('container-class', 'wide')
+@section('header-class', 'red')
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+@section('icon', '⚠️')
+@section('header-title', 'Pending Orders Alert')
+@section('header-subtitle', now()->format('F d, Y - H:i'))
 
-        .header {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
+@section('header')
+    @include('emails.layouts.header')
+@endsection
 
-        .order-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
+@section('content')
+    <p>Hello Admin,</p>
+    <p>This is your automated report for pending orders that require attention.</p>
 
-        .order-table th,
-        .order-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .order-table th {
-            background-color: #f2f2f2;
-        }
-
-        .summary {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-
-        .urgent {
-            color: #dc3545;
-            font-weight: bold;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Pending order notification</h1>
-            <p>Reporting time: <strong>{{ now()->format('d/m/Y H:i') }}</strong></p>
+    <div class="summary">
+        <h2>📊 Summary Overview</h2>
+        <div class="stat-row">
+            <span class="stat-label">Total Pending Orders:</span>
+            <span class="stat-value urgent">{{ $totalPending }} Orders</span>
         </div>
-
-        <div class="summary">
-            <h2>General</h2>
-            <p><strong>Total number of pending orders:</strong> <span class="urgent">{{ $totalPending }} Orders</span></p>
-            <p><strong>Total Amount:</strong> {{ number_format($totalRevenue, 0, ',', '.') }} $</p>
+        <div class="stat-row">
+            <span class="stat-label">Total Revenue Pending:</span>
+            <span class="stat-value">${{ number_format($totalRevenue, 2) }}</span>
         </div>
-
-        @if ($pendingOrder->count() > 0)
-            <h2>Orders</h2>
-            <table class="order-table">
-                <thead>
-                    <tr>
-                        <th>Order Code</th>
-                        <th>Customer</th>
-                        <th>Purchase Time</th>
-                        <th>Quantity</th>
-                        <th>Total Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pendingOrder as $order)
-                        <tr>
-                            <td><strong>{{ $order->order_code }}</strong></td>
-                            <td>{{ $order->user->username }}<br><small>{{ $order->user->email }}</small></td>
-                            <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                            <td>{{ $order->orderDetails->sum('quantity') }}</td>
-                            <td>{{ number_format($order->total_amount, 0, ',', '.') }}$</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            <div style="margin-top: 30px; text-align: center;">
-                <a href="{{ route('admin.orders') }}"
-                    style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
-                    Order management
-                </a>
-            </div>
-        @endif
-
-        <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center;">
-            <p>Auto Email From Emart Store</p>
-        </footer>
+        <div class="stat-row">
+            <span class="stat-label">Report Generated:</span>
+            <span class="stat-value muted">{{ now()->format('F d, Y - H:i') }}</span>
+        </div>
     </div>
-</body>
 
-</html>
+    @if ($totalPending > 5)
+        <div class="alert-box">
+            <p>
+                <strong>⚠️ High Volume Alert:</strong> You have {{ $totalPending }} pending orders. Please process them as soon as possible to maintain customer satisfaction.
+            </p>
+        </div>
+    @endif
+
+    @if ($pendingOrder->count() > 0)
+        <h2 class="red">📦 Pending Orders Details</h2>
+        <table class="order-table">
+            <thead>
+                <tr>
+                    <th>Order Code</th>
+                    <th>Customer</th>
+                    <th>Purchase Time</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($pendingOrder as $order)
+                    <tr>
+                        <td><strong>{{ $order->order_code }}</strong></td>
+                        <td>{{ $order->user->username }}<br><small>{{ $order->user->email }}</small></td>
+                        <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $order->orderDetails->sum('quantity') }}</td>
+                        <td>{{ number_format($order->total_amount, 0, ',', '.') }}$</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <div class="text-center mt-30">
+            <a href="{{ route('admin.orders') }}" class="button red">Manage Pending Orders</a>
+        </div>
+    @else
+        <div class="success-box">
+            <p>
+                <strong>✓ All Clear!</strong><br>
+                No pending orders at this time.
+            </p>
+        </div>
+    @endif
+
+    <p class="mt-30">This is an automated report to help you stay on top of order management.</p>
+
+    <p>Best regards,<br><strong>Emart System</strong></p>
+@endsection
+
+@section('footer')
+    @include('emails.layouts.footer')
+@endsection
+
+@section('footer-subtitle', 'Automated Order Management System')

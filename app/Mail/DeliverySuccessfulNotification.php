@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PurchaseSuccessNotification extends Mailable
+class DeliverySuccessfulNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -29,7 +29,7 @@ class PurchaseSuccessNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Purchase Success Notification',
+            subject: 'Delivery Successful Notification',
         );
     }
 
@@ -39,12 +39,9 @@ class PurchaseSuccessNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.purchase-success',
+            view: 'emails.delivery-successful',
             with: [
                 'order' => $this->order,
-                'customer' => $this->order->user,
-                'items' => $this->order->orderDetails,
-                'shipping' => $this->order->orderShipping,
             ]
         );
     }
