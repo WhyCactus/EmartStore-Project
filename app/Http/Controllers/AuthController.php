@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\CommonStatus;
+use App\Events\UserLoggedIn;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Log;
 
 class AuthController extends Controller
 {
@@ -34,12 +37,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            if (Auth::user()->status !== 'active') {
+            if (Auth::user()->status !== CommonStatus::ACTIVE) {
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 return redirect()->back()->with('error', 'Your account is inactive. Please contact the administrator.');
             }
+            event(new UserLoggedIn(Auth::user(), $request->ip(), $request->userAgent()));
             return redirect()->route('home');
         }
 
