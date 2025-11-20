@@ -13,4 +13,5 @@ interface ProductRepositoryInterface
     public function getByIdWithRelations($id, array $relations = []);
     public function getRelatedProducts($id);
     public function getProductByIdWithRelations($id, $relations = ['brand', 'category']);
+    public function getTotalProductsCount();
 }

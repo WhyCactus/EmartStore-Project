@@ -90,4 +90,9 @@ class UserRepository
         $user->save();
         return $user;
     }
+
+    public function getTotalUsersCount(): int
+    {
+        return $this->model->where('status', CommonStatus::ACTIVE)->count();
+    }
 }

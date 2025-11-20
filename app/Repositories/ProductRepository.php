@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Constants\CommonStatus;
 use App\Models\Product;
 use App\Repositories\ProductRepositoryInterface;
 
@@ -66,5 +67,12 @@ class ProductRepository implements ProductRepositoryInterface
     public function getProductByIdWithRelations($id, $relations = ['brand', 'category'])
     {
         return $this->model->with($relations)->findOrFail($id);
+    }
+
+    public function getTotalProductsCount()
+    {
+        return $this->model
+            ->where('status', CommonStatus::ACTIVE)
+            ->count();
     }
 }

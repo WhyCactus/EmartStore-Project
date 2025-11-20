@@ -115,4 +115,18 @@ class OrderRepository implements OrderRepositoryInterface
         $order->cancelled_at = Carbon::now();
         $order->save();
     }
+
+    public function getTotalOrdersCount()
+    {
+        return $this->model
+            ->where('order_status', '!=', 'cancelled')
+            ->count();
+    }
+
+    public function getTotalRevenue()
+    {
+        return $this->model
+            ->where('payment_status', 'paid')
+            ->sum('total_amount');
+    }
 }
