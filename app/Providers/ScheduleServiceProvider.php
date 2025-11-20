@@ -29,6 +29,6 @@ class ScheduleServiceProvider extends ServiceProvider
     public function schedule(Schedule $schedule): void
     {
         $schedule->command('orders:send-pending-orders-notification')
-            ->hourly();
+            ->dailyAt('10:00');
     }
 }
