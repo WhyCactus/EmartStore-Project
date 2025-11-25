@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Constants\OrderStatus;
 use App\Constants\PaymentStatus;
+use App\Constants\SortInOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
@@ -23,7 +24,7 @@ class OrderController extends Controller
     public function index()
     {
         try {
-            $orders = Order::orderBy("created_at", "desc")->paginate(10);
+            $orders = Order::orderBy("created_at", SortInOrder::DESC)->paginate(10);
             return OrderResource::collection($orders);
         } catch (\Throwable $e) {
             return response()->json([
@@ -39,64 +40,68 @@ class OrderController extends Controller
     public function store(OrderRequest $request)
     {
         try {
-            $validated = $request->validated();
+            $validatedData = $request->validated();
+            $items = $validatedData['items'];
+            $productIds = collect($items)->pluck('product_id')->unique();
 
-            foreach ($validated['items'] as $item) {
-                $product = Product::find($item['product_id']);
-                if (!$product) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Product ID {$item['product_id']} not found",
-                    ], 404);
+            $order = DB::transaction(function () use ($validatedData, $items, $productIds) {
+                $products = Product::whereIn('id', $productIds)->lockForUpdate()->get()->keyBy('id');
+
+                foreach ($items as $item) {
+                    $pid = $item['product_id'];
+                    if (!isset($products[$pid])) {
+                        throw ValidationException::withMessages([
+                            'items' => ["Product with ID {$pid} not found."]
+                        ]);
+                    }
+
+                    $product = $products[$pid];
+                    if ($product->quantity_in_stock < $item['quantity']) {
+                        throw ValidationException::withMessages([
+                            'items' => ["Insufficient stock for product ID {$pid}."]
+                        ]);
+                    }
                 }
 
-                if ($product->quantity_in_stock < $item['quantity']) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Insufficient stock for product: {$product->product_name}. Available: {$product->quantity_in_stock}",
-                    ], 400);
-                }
-            }
-
-            $order = DB::transaction(function () use ($validated) {
-                $subtotalAmount = 0;
-                $totalAmount = 0;
-                foreach ($validated['items'] as $item) {
-                    $subtotalAmount += $item['unit_price'] * $item['quantity'];
-                }
-
-                $shippingFee = 15;
-                $totalAmount = $subtotalAmount + $shippingFee;
+                $subTotal = collect(($items))->sum(fn($i) => $i['unit_price'] * $i['quantity']);
+                $shippingCost = 15;
+                $totalAmount = $subTotal + $shippingCost;
 
                 $order = Order::create([
-                    'user_id' => $validated['user_id'],
-                    'order_code' => 'ORD-' . strtoupper(uniqid()),
-                    'recipient_name' => $validated['recipient_name'],
-                    'recipient_phone' => $validated['recipient_phone'],
-                    'recipient_address' => $validated['recipient_address'],
-                    'subtotal_amount' => $subtotalAmount,
+                    'user_id' => $validatedData['user_id'],
+                    'order_code' => 'ORD' . strtoupper(uniqid()),
+                    'recipient_name' => $validatedData['recipient_name'],
+                    'recipient_phone' => $validatedData['recipient_phone'],
+                    'recipient_address' => $validatedData['recipient_address'],
+                    'subtotal_amount' => $subTotal,
+                    'shipping_cost' => $shippingCost,
                     'total_amount' => $totalAmount,
-                    'payment_method' => $validated['payment_method'],
-                    'payment_status' => PaymentStatus::PENDING,
+                    'payment_method' => $validatedData['payment_method'],
                     'order_status' => OrderStatus::PENDING,
+                    'payment_status' => PaymentStatus::PENDING,
                 ]);
 
-                foreach ($validated['items'] as $item) {
-                    OrderDetail::create([
+                $details = [];
+                foreach ($items as $item) {
+                    $p = $products[$item['product_id']];
+                    $details[] = [
                         'order_id' => $order->id,
-                        'snapshot_product_name' => Product::find($item['product_id'])->product_name,
-                        'snapshot_product_sku' => Product::find($item['product_id'])->sku,
-                        'snapshot_product_price' => Product::find($item['product_id'])->discounted_price,
-                        'snapshot_variant_attributes' => null,
-                        'product_id' => $item['product_id'],
+                        'snapshot_product_name' => $p->product_name,
+                        'snapshot_product_sku' => $p->sku,
+                        'snapshot_product_price' => $item['unit_price'],
+                        'product_id' => $p->id,
                         'quantity' => $item['quantity'],
                         'unit_price' => $item['unit_price'],
                         'total_price' => $item['unit_price'] * $item['quantity'],
-                    ]);
+                    ];
 
-                    $product = Product::find($item['product_id']);
-                    $product->quantity_in_stock -= $item['quantity'];
-                    $product->sold_count += $item['quantity'];
+                    $p->decrement('quantity_in_stock', $item['quantity']);
+                    $p->increment('sold_count', $item['quantity']);
+                }
+
+                OrderDetail::insert($details);
+
+                foreach ($products as $product) {
                     $product->save();
                 }
 
@@ -110,7 +115,6 @@ class OrderController extends Controller
                 'message' => 'Order created successfully',
                 'data' => new OrderResource($order)
             ], 201);
-
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
@@ -146,12 +150,12 @@ class OrderController extends Controller
         try {
             $order = Order::findOrFail($id);
 
-            $validated = $request->validate([
+            $validatedData = $request->validate([
                 'order_status' => 'sometimes|string',
                 'payment_status' => 'sometimes|string',
             ]);
 
-            $order->update($validated);
+            $order->update($validatedData);
             return response()->json([
                 'success' => true,
                 'message' => 'Order updated successfully',

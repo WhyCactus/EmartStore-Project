@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Constants\SortInOrder;
+use App\Constants\SortName;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
@@ -23,7 +25,7 @@ class HomeRepository
         return Product::with('brand', 'category')
             ->where('status', 'active')
             ->where('quantity_in_stock', '>', 0)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', SortInOrder::DESC)
             ->get();
     }
 
@@ -38,12 +40,12 @@ class HomeRepository
     public function getSortQuery($sort)
     {
         return function ($query) use ($sort) {
-            if ($sort === 'newest') {
-                return $query->orderBy('created_at', 'desc');
-            } elseif ($sort === 'popular') {
-                return $query->orderBy('sold_count', 'desc');
+            if ($sort === SortName::SORT_NEWEST) {
+                return $query->orderBy('created_at', SortInOrder::DESC);
+            } elseif ($sort === SortName::SORT_POPULAR) {
+                return $query->orderBy('sold_count', SortInOrder::DESC);
             }
-            return $query->orderBy('created_at', 'desc');
+            return $query->orderBy('created_at', SortInOrder::DESC);
         };
     }
 
@@ -55,19 +57,19 @@ class HomeRepository
             ->where('quantity_in_stock', '>', 0);
     }
 
-    public function getAllProducts($sort = 'newest', $perPage = 9)
+    public function getAllProducts($sort = SortName::SORT_NEWEST, $perPage = 9)
     {
         return $this->getBaseProductsQuery($sort)->paginate($perPage);
     }
 
-    public function getProductsByCategory($categoryId, $sort = 'newest', $perPage = 9)
+    public function getProductsByCategory($categoryId, $sort = SortName::SORT_NEWEST, $perPage = 9)
     {
         return $this->getBaseProductsQuery($sort)
             ->where('category_id', $categoryId)
             ->paginate($perPage);
     }
 
-    public function getProductsByBrand($brandId, $sort = 'newest', $perPage = 9)
+    public function getProductsByBrand($brandId, $sort = SortName::SORT_NEWEST, $perPage = 9)
     {
         return $this->getBaseProductsQuery($sort)
             ->where('brand_id', $brandId)

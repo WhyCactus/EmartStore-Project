@@ -35,7 +35,7 @@ class BrandService
 
     public function updateBrand($id, array $data)
     {
-        $brand = $this->brandRepository->getById($id);
+        $this->brandRepository->getById($id);
 
         $updatedData = [
             'brand_name' => $data['brand_name'],

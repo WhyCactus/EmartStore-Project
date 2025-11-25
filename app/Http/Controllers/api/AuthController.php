@@ -18,13 +18,13 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $validated = $request->validated();
+        $validatedData = $request->validated();
 
         $user = User::create([
-            'username' => $validated['username'],
-            'email' => $validated['email'],
-            'phone' => $validated['phone'],
-            'password' => bcrypt($validated['password']),
+            'username' => $validatedData['username'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'password' => bcrypt($validatedData['password']),
             'role_id' => UserRole::USER,
         ]);
 

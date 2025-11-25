@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Constants\OrderStatus;
+use App\Constants\PaymentStatus;
 use App\Mail\DeliverySuccessfulNotification;
 use App\Models\Order;
 use Carbon\Carbon;
@@ -114,7 +115,7 @@ class OrderRepository implements OrderRepositoryInterface
         }
 
         if ($status === OrderStatus::DELIVERED) {
-            $data['payment_status'] = 'paid';
+            $data['payment_status'] = PaymentStatus::PAID;
         }
 
         return $data;
@@ -123,7 +124,7 @@ class OrderRepository implements OrderRepositoryInterface
     public function cancelOrderbyId(int $id): void
     {
         $order = Order::find($id);
-        $order->order_status = 'cancelled';
+        $order->order_status = OrderStatus::CANCELLED;
         $order->cancelled_at = Carbon::now();
         $order->save();
     }
@@ -131,14 +132,14 @@ class OrderRepository implements OrderRepositoryInterface
     public function getTotalOrdersCount()
     {
         return $this->model
-            ->where('order_status', '!=', 'cancelled')
+            ->where('order_status', '!=', OrderStatus::CANCELLED)
             ->count();
     }
 
     public function getTotalRevenue()
     {
         return $this->model
-            ->where('payment_status', 'paid')
+            ->where('payment_status', PaymentStatus::PAID)
             ->sum('total_amount');
     }
 }
