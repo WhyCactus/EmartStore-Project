@@ -17,14 +17,29 @@
             </div>
             <div class="col-md-3">
                 <div class="user">
-                    <div class="dropdown">
-                        @auth()
-                            <div class="bell gap-5">
-                                <a href="#"><i class="fa fa-bell"></i></a>
+                    @auth()
+                        <div class="bell">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notificationBell">
+                                <i class="fa fa-bell"></i>
+                                <span class="notification-badge" id="notificationCount" style="display: none">0</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right notification-menu" id="notificationMenu">
+                                <div class="notification-header">
+                                    <span class="text-white">Notifications</span>
+                                    <a href="#" id="markAllRead">Mark all as read</a>
+                                </div>
+                                <div class="notification-list" id="notificationList">
+                                    <div class="notification-empty">
+                                        <i class="fa fa-bell-slash"></i>
+                                        <p>No new notifications</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="cart">
-                                <a href="{{ route('cart.list') }}"><i class="fa fa-cart-plus"></i></a>
-                            </div>
+                        </div>
+                        <div class="cart">
+                            <a href="{{ route('cart.list') }}"><i class="fa fa-cart-plus"></i></a>
+                        </div>
+                        <div class="dropdown">
                             <a href="#" class="dropdown-toggle"
                                 data-toggle="dropdown">{{ Auth::user()->username }}</a>
                             <div class="dropdown-menu">
@@ -46,4 +61,24 @@
         </div>
     </div>
 </div>
+
+@auth
+    <div class="toast-container position-fixed" style="top: 80px; right: 20px; z-index: 9999;">
+        <div id="notificationToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-primary text-white justify-content-between">
+                <div>
+                    <i class="fa fa-bell me-2"></i>
+                    <strong class="me-auto">New Notification</strong>
+                </div>
+                <div>
+                    <small id="toastTime">Just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="toast-body" id="toastBody">
+                <!-- Notification message will be inserted here -->
+            </div>
+        </div>
+    </div>
+@endauth
 <!-- Top Header End -->

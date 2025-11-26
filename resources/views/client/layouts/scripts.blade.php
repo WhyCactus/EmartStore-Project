@@ -14,3 +14,8 @@
     window.errorMessage = @json(Session::get('error'));
     window.validationErrors = @json($errors->all());
 </script>
+
+@auth()
+    <meta name="user-id" content="{{ Auth::user()->id }}">
+    @vite(['resources/js/app.js'])
+@endauth

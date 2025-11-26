@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderCreated;
 use App\Http\Requests\CheckOutRequest;
 use App\Services\CheckOutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CheckOutController extends Controller
 {
-    public function __construct(private CheckOutService $checkOutService) {}
+    public function __construct(private CheckOutService $checkOutService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -32,7 +36,7 @@ class CheckOutController extends Controller
     {
         try {
             $order = $this->checkOutService->processCheckOut(Auth::user()->id, $request->validated());
-
+            event(new OrderCreated($order, Auth::user()->id));
             return redirect()
                 ->route('checkout.success', ['orderCode' => $order->order_code])
                 ->with('success', 'Order processed successfully!');

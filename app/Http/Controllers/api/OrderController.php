@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\OrderShipping;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -74,11 +75,16 @@ class OrderController extends Controller
                     'recipient_phone' => $validatedData['recipient_phone'],
                     'recipient_address' => $validatedData['recipient_address'],
                     'subtotal_amount' => $subTotal,
-                    'shipping_cost' => $shippingCost,
                     'total_amount' => $totalAmount,
                     'payment_method' => $validatedData['payment_method'],
                     'order_status' => OrderStatus::PENDING,
                     'payment_status' => PaymentStatus::PENDING,
+                ]);
+
+                OrderShipping::create([
+                    'order_id' => $order->id,
+                    'shipping_method' => $validatedData['shipping_method'] ?? 'standard',
+                    'shipping_cost' => $shippingCost,
                 ]);
 
                 $details = [];
