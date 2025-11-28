@@ -27,6 +27,8 @@ class LogUserLogin
                 'user_id' => $event->user->id,
                 'ip_address' => $event->ipAddress,
                 'user_agent' => $event->userAgent,
+                'login_method' => $event->loginMethod ?? 'web',
+                'is_successful' => true,
                 'logged_in_at' => now(),
             ]);
         } catch (\Exception $e) {

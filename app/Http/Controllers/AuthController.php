@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\CommonStatus;
+use App\Events\LoginFailed;
 use App\Events\UserLoggedIn;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
@@ -38,15 +39,17 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             if (Auth::user()->status !== CommonStatus::ACTIVE) {
+                $user = Auth::user();
                 Auth::logout();
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
+                event(new LoginFailed($user->email, $request->ip(), $request->userAgent(), 'inactive_account'));
                 return redirect()->back()->with('error', 'Your account is inactive. Please contact the administrator.');
             }
-            event(new UserLoggedIn(Auth::user(), $request->ip(), $request->userAgent()));
+            event(new UserLoggedIn(Auth::user(), $request->ip(), $request->userAgent(), 'web'));
             return redirect()->route('home');
         }
-
+        event(new LoginFailed($request->email, $request->ip(), $request->userAgent(), 'invalid_credentials'));
         return back()->with('error', 'Email or password is incorrect.')->onlyInput('email');
     }
 
