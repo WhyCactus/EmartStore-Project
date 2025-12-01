@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\OrderCreated;
 use App\Http\Requests\CheckOutRequest;
+use App\Notifications\OrderNotification;
 use App\Services\CheckOutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +37,15 @@ class CheckOutController extends Controller
     {
         try {
             $order = $this->checkOutService->processCheckOut(Auth::user()->id, $request->validated());
-            event(new OrderCreated($order, Auth::user()->id));
+
+            $user = Auth::user();
+            $user->notify(new OrderNotification(
+                $order,
+                $order->order_code,
+                'Your order has been placed successfully!',
+                'order'
+            ));
+
             return redirect()
                 ->route('checkout.success', ['orderCode' => $order->order_code])
                 ->with('success', 'Order processed successfully!');
