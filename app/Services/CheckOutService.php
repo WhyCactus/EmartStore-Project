@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constants\DeliveryMethod;
 use App\Mail\PurchaseSuccessNotification;
 use App\Repositories\CartRepositoryInterface;
 use App\Repositories\CheckOutRepositoryInterface;
@@ -39,8 +40,8 @@ class CheckOutService
             }
 
             $subtotal = $cartItems->sum('total_price');
-            $shippingCost = 1;
-            $shippingMethod = 'standard';
+            $shippingCost = 15;
+            $shippingMethod = DeliveryMethod::STANDARD;
             $totalAmount = $subtotal + $shippingCost;
 
             $order = $this->orderRepository->createOrder([
