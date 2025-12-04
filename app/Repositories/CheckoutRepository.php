@@ -76,4 +76,9 @@ class CheckoutRepository implements CheckOutRepositoryInterface
             'estimated_delivery_date' => $estimatedDelivery,
         ]);
     }
+
+    public function findOrderById($orderId)
+    {
+        return Order::with(['orderDetails', 'orderShipping'])->find($orderId);
+    }
 }

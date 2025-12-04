@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Constants\DeliveryMethod;
 use App\Constants\OrderStatus;
 use App\Constants\PaymentStatus;
 use App\Constants\SortInOrder;
@@ -48,22 +49,6 @@ class OrderController extends Controller
             $order = DB::transaction(function () use ($validatedData, $items, $productIds) {
                 $products = Product::whereIn('id', $productIds)->lockForUpdate()->get()->keyBy('id');
 
-                foreach ($items as $item) {
-                    $pid = $item['product_id'];
-                    if (!isset($products[$pid])) {
-                        throw ValidationException::withMessages([
-                            'items' => ["Product with ID {$pid} not found."]
-                        ]);
-                    }
-
-                    $product = $products[$pid];
-                    if ($product->quantity_in_stock < $item['quantity']) {
-                        throw ValidationException::withMessages([
-                            'items' => ["Insufficient stock for product ID {$pid}."]
-                        ]);
-                    }
-                }
-
                 $subTotal = collect(($items))->sum(fn($i) => $i['unit_price'] * $i['quantity']);
                 $shippingCost = 15;
                 $totalAmount = $subTotal + $shippingCost;
@@ -83,32 +68,45 @@ class OrderController extends Controller
 
                 OrderShipping::create([
                     'order_id' => $order->id,
-                    'shipping_method' => $validatedData['shipping_method'] ?? 'standard',
+                    'shipping_method' => $validatedData['shipping_method'] ?? DeliveryMethod::STANDARD,
                     'shipping_cost' => $shippingCost,
                 ]);
 
                 $details = [];
                 foreach ($items as $item) {
-                    $p = $products[$item['product_id']];
+                    $product = $products[$item['product_id']];
                     $details[] = [
                         'order_id' => $order->id,
-                        'snapshot_product_name' => $p->product_name,
-                        'snapshot_product_sku' => $p->sku,
+                        'snapshot_product_name' => $product->product_name,
+                        'snapshot_product_sku' => $product->sku,
                         'snapshot_product_price' => $item['unit_price'],
-                        'product_id' => $p->id,
+                        'product_id' => $product->id,
                         'quantity' => $item['quantity'],
                         'unit_price' => $item['unit_price'],
                         'total_price' => $item['unit_price'] * $item['quantity'],
                     ];
 
-                    $p->decrement('quantity_in_stock', $item['quantity']);
-                    $p->increment('sold_count', $item['quantity']);
+                    $stockUpdates[$product->id] = ($stockUpdates[$product->id] ?? 0) + $item['quantity'];
                 }
 
                 OrderDetail::insert($details);
 
-                foreach ($products as $product) {
-                    $product->save();
+                if (!empty($stockUpdates)) {
+                    $cases = '';
+                    $soldCases = '';
+                    $ids = array_keys($stockUpdates);
+
+                    foreach ($stockUpdates as $id => $quantity) {
+                        $cases .= "WHEN id = {$id} THEN quantity_in_stock - {$quantity} ";
+                        $soldCases .= "WHEN id = {$id} THEN sold_count + {$quantity} ";
+                    }
+
+                    DB::statement("
+                        UPDATE products
+                        SET quantity_in_stock = CASE {$cases} END,
+                            sold_count = CASE {$soldCases} END
+                        WHERE id IN (" . implode(',', $ids) . ")
+                    ");
                 }
 
                 return $order;

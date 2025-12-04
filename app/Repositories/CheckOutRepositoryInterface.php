@@ -8,4 +8,5 @@ interface CheckOutRepositoryInterface
     public function createOrderItems($orderId, array $items);
     public function findOrderByCode($orderCode);
     public function createOrderShipping(array $data);
+    public function findOrderById($orderId);
 }

@@ -23,9 +23,9 @@ class CheckOutRequest extends FormRequest
     {
         return [
             'recipient_name' => 'required|string|max:255',
-            'recipient_address'=> 'required|string|max:255',
-            'recipient_phone'=> 'required|string|max:20',
-            'payment_method'=> 'required|in:cash',
+            'recipient_address' => 'required|string|max:255',
+            'recipient_phone' => 'required|string|max:20',
+            'payment_method' => 'required|in:cash,stripe',
         ];
     }
 
@@ -33,9 +33,9 @@ class CheckOutRequest extends FormRequest
     {
         return [
             'recipient_name.required' => 'Please enter a recipient name.',
-            'recipient_address.required'=> 'Please enter a recipient address.',
-            'recipient_phone.required'=> 'Please enter a recipient phone number.',
-            'payment_method.required'=> 'Please select a payment method.'
+            'recipient_address.required' => 'Please enter a recipient address.',
+            'recipient_phone.required' => 'Please enter a recipient phone number.',
+            'payment_method.required' => 'Please select a payment method.'
         ];
     }
 }

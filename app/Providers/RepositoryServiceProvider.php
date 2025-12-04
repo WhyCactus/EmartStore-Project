@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Repositories\AuthRepository;
 use App\Repositories\AuthRepositoryInterface;
 use App\Repositories\CartRepository;
+use App\Repositories\StripePaymentRepository;
+use App\Repositories\StripePaymentRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\BrandRepositoryInterface;
 use App\Repositories\CategoryRepositoryInterface;
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CheckOutRepositoryInterface::class, CheckoutRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
+        $this->app->bind(StripePaymentRepositoryInterface::class, StripePaymentRepository::class);
     }
 
     /**

@@ -30,5 +30,15 @@ class ScheduleServiceProvider extends ServiceProvider
     {
         $schedule->command('orders:send-pending-orders-notification')
             ->dailyAt('10:00');
+
+        $schedule->command('orders:cancel-expired-stripe')
+            ->everyFiveMinutes()
+            ->withoutOverlapping()
+            ->runInBackground();
+
+        $schedule->command('orders:send-stripe-payment-warnings')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->runInBackground();
     }
 }

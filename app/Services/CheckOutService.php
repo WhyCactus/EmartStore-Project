@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Constants\DeliveryMethod;
+use App\Constants\PaymentStatus;
 use App\Mail\PurchaseSuccessNotification;
 use App\Repositories\CartRepositoryInterface;
 use App\Repositories\CheckOutRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class CheckOutService
 {
@@ -94,18 +96,55 @@ class CheckOutService
                 'shipping_cost' => $shippingCost,
             ]);
 
-            $this->cartRepository->clearCart($cart->id);
+            Session::put('pending_order_id', $order->id);
+            Session::put('checkout_data', [
+                'order_code' => $order->order_code,
+                'total_amount' => $totalAmount,
+                'cart_id' => $cart->id,
+            ]);
 
-            $order->load(['user', 'orderDetails', 'orderShipping']);
+            if ($checkOutData['payment_method'] === 'cash') {
+                $this->cartRepository->clearCart($cart->id);
 
-            try {
-                Mail::to($order->user->email)
-                    ->send(new PurchaseSuccessNotification($order));
-            } catch (\Exception $e) {
-                throw new \Exception('Email sending failed.');
+                $order->load(['user', 'orderDetails', 'orderShipping']);
+
+                try {
+                    Mail::to($order->user->email)
+                        ->send(new PurchaseSuccessNotification($order));
+                } catch (\Exception $e) {
+                    throw new \Exception('Email sending failed.');
+                }
             }
 
             return $order;
         });
+    }
+
+    public function completeStripePayment($orderId)
+    {
+        $checkoutData = Session::get('checkout_data');
+
+        if (!$checkoutData) {
+            throw new \Exception('No checkout data found in session.');
+        }
+
+        $order = $this->orderRepository->findOrderById($orderId);
+
+        $this->cartRepository->clearCart($checkoutData['cart_id']);
+
+        $order->update(['payment_status' => PaymentStatus::PAID]);
+
+        $order->load(['user', 'orderDetails', 'orderShipping']);
+
+        try {
+            Mail::to($order->user->email)
+                ->send(new PurchaseSuccessNotification($order));
+        } catch (\Exception $e) {
+            throw new \Exception('Email sending failed.');
+        }
+
+        Session::forget(['pending_order_id', 'checkout_data']);
+
+        return $order;
     }
 }

@@ -5,15 +5,6 @@
 @section('content')
     <!-- Checkout Start -->
     <div class="checkout">
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
         <div class="container">
             <form action="{{ route('checkout.process') }}" method="POST">
                 @csrf
@@ -26,7 +17,8 @@
                                     <label>Full Name</label>
                                     <input class="form-control" type="text" name="recipient_name" required
                                         value="{{ old('recipient_name', Auth::user()->username) }}">
-                                    @error('')
+                                    @error('recipient_name')
+                                        <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-12">
@@ -60,8 +52,8 @@
 
                                 <p class="sub-total">Sub Total<span id="sub-total">{{ number_format($cartTotal) }}₫</span>
                                 </p>
-                                <p class="ship-cost">Shipping Cost<span id="shipping-cost">1$</span></p>
-                                <h4>Grand Total<span id="grand-total">{{ number_format($cartTotal + 1) }}$</span></h4>
+                                <p class="ship-cost">Shipping Cost<span id="shipping-cost">15$</span></p>
+                                <h4>Grand Total<span id="grand-total">{{ number_format($cartTotal + 15) }}$</span></h4>
                             </div>
                         </div>
 
@@ -78,6 +70,19 @@
                                     <div class="payment-content" id="payment-1-show">
                                         <p>
                                             Cash on Delivery
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="payment-method">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="payment-2"
+                                            name="payment_method" value="stripe"
+                                            {{ old('payment_method') == 'stripe' ? 'checked' : '' }}>
+                                        <label class="custom-control-label" for="payment-2">Stripe</label>
+                                    </div>
+                                    <div class="payment-content" id="payment-2-show">
+                                        <p>
+                                            Pay via Stripe; you can pay with your credit card.
                                         </p>
                                     </div>
                                 </div>

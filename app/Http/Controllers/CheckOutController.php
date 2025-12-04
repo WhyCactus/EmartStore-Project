@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\PaymentMethod;
 use App\Events\OrderCreated;
 use App\Http\Requests\CheckOutRequest;
+use App\Models\Order;
 use App\Notifications\OrderNotification;
 use App\Services\CheckOutService;
 use Illuminate\Http\Request;
@@ -38,6 +40,10 @@ class CheckOutController extends Controller
         try {
             $order = $this->checkOutService->processCheckOut(Auth::user()->id, $request->validated());
 
+            if ($request->payment_method === PaymentMethod::STRIPE) {
+                return redirect()->route('stripe')->withInput(['order_id' => $order->id]);
+            }
+
             $user = Auth::user();
             $user->notify(new OrderNotification(
                 $order,
@@ -58,7 +64,7 @@ class CheckOutController extends Controller
     {
         session()->forget('cart_count');
 
-        $order = \App\Models\Order::with(['orderDetails', 'orderShipping'])
+        $order = Order::with(['orderDetails', 'orderShipping'])
             ->where('order_code', $orderCode)
             ->firstOrFail();
 
