@@ -37,8 +37,8 @@ class SendStripePaymentWarnings extends Command
             ->where('payment_status', PaymentStatus::PENDING)
             ->where('order_status', OrderStatus::PENDING)
             ->whereBetween('created_at', [
-                Carbon::now()->subMinutes(21),
-                Carbon::now()->subMinutes(19)
+                Carbon::now()->subMinutes(15),
+                Carbon::now()->subMinutes(11),
             ])
             ->get();
 
@@ -59,7 +59,7 @@ class SendStripePaymentWarnings extends Command
 
             try {
                 $minutesElapsed = $order->created_at->diffInMinutes(now());
-                $minutesRemaining = 30 - $minutesElapsed;
+                $minutesRemaining = 20 - $minutesElapsed;
 
                 if ($minutesRemaining > 0 && $minutesRemaining <= 10) {
                     Mail::to($order->user->email)
@@ -75,7 +75,7 @@ class SendStripePaymentWarnings extends Command
             }
         }
 
-        $this->info("Total warnings sent: {$sentCount}");
+        $this->info("Total warnings sent: {$warningOrders->count()}");
         return 0;
     }
 }

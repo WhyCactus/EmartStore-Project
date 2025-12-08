@@ -29,7 +29,7 @@ class SendExpiredStripePayment extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Expired Stripe Payment',
+            subject: 'Payment Expired - Order ' . $this->order->order_code,
         );
     }
 
@@ -39,7 +39,10 @@ class SendExpiredStripePayment extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.payment-expired',
+            with: [
+                'order' => $this->order,
+            ],
         );
     }
 

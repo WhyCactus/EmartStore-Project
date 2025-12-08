@@ -42,7 +42,7 @@ class SendStripePaymentWarnings extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.stripe_payment_warnings',
+            view: 'emails.stripe-payment-warning',
             with: [
                 'order' => $this->order,
                 'minutesRemaining' => $this->minutesRemaining,
