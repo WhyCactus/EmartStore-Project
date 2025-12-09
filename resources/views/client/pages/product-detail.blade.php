@@ -11,7 +11,7 @@
                     <div class="row align-items-center product-detail-top">
                         <div class="col-md-5">
                             <div class="product-slider-single">
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->product_name }}">
+                                <img src="{{ minioUrl($product->image) }}" alt="{{ $product->product_name }}">
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -231,7 +231,7 @@
                                         <div class="col-lg-3 col-md-4 col-sm-6">
                                             <div class="product-item">
                                                 <div class="product-image">
-                                                    <img src="{{ asset('storage/' . $relatedProduct->image) }}"
+                                                    <img src="{{ minioUrl($relatedProduct->image) }}"
                                                         alt="{{ $relatedProduct->product_name }}">
                                                     <div class="product-action">
                                                         <form action="#" method="POST" class="d-inline">

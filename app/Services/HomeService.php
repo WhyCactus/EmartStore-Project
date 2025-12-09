@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constants\SortName;
 use App\Repositories\HomeRepository;
 
 class HomeService {
@@ -11,11 +12,11 @@ class HomeService {
         $this->homeRepository = $homeRepository;
     }
 
-    public function getProductsByCategory($categoryId, $sort = 'newest', $perPage = 9) {
+    public function getProductsByCategory($categoryId, $sort = SortName::SORT_NEWEST, $perPage = 9) {
         return $this->homeRepository->getProductsByCategory($categoryId, $sort, $perPage);
     }
 
-    public function getProductsByBrand($brandId, $sort = 'newest', $perPage = 9) {
+    public function getProductsByBrand($brandId, $sort = SortName::SORT_NEWEST, $perPage = 9) {
         return $this->homeRepository->getProductsByBrand($brandId, $sort, $perPage);
     }
 
@@ -35,7 +36,7 @@ class HomeService {
         return $this->homeRepository->getRecentProducts();
     }
 
-    public function getAllProducts($sort = 'newest', $perPage = 9) {
+    public function getAllProducts($sort = SortName::SORT_NEWEST, $perPage = 9) {
         return $this->homeRepository->getAllProducts($sort, $perPage);
     }
 }

@@ -11,6 +11,7 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "league/flysystem-aws-s3-v3": "^3.30",
         "pusher/pusher-php-server": "^7.2",
         "stripe/stripe-php": "^19.0"
     },
@@ -28,7 +29,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/minioHelper.php",
+            "app/Helpers/urlHelper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

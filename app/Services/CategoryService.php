@@ -32,7 +32,7 @@ class CategoryService
         ];
 
         if (isset($data['image']) && $data['image']->isValid()) {
-            $imagePath = $data['image']->store('categories', 'public');
+            $imagePath = $data['image']->store('categories', 'minio');
             $categoryData['image'] = $imagePath;
         }
 
@@ -50,10 +50,10 @@ class CategoryService
         if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
             if ($data['image']->isValid()) {
                 if ($category->image) {
-                    Storage::disk('public')->delete($category->image);
+                    Storage::disk('minio')->delete($category->image);
                 }
 
-                $imagePath = $data['image']->store('categories', 'public');
+                $imagePath = $data['image']->store('categories', 'minio');
                 $updatedData['image'] = $imagePath;
             }
         }
@@ -66,7 +66,7 @@ class CategoryService
         $category = $this->categoryRepository->getById($id);
 
         if ($category->image) {
-            Storage::disk('public')->delete($category->image);
+            Storage::disk('minio')->delete($category->image);
         }
 
         return $this->categoryRepository->delete($id);

@@ -25,7 +25,7 @@
                                     @foreach ($cart->items as $item)
                                         <tr>
                                             <td>
-                                                <img src="{{ asset('storage/' . ($item->productVariant && $item->productVariant->image ? $item->productVariant->image : $item->product->image)) }}" alt="Image">
+                                                <img src="{{ minioUrl($item->productVariant && $item->productVariant->image ? $item->productVariant->image : $item->product->image) }}" alt="Image">
                                             </td>
                                             <td>
                                                 <a href="#">{{ $item->product->product_name }}</a>

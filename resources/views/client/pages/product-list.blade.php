@@ -45,7 +45,7 @@
                                 <div class="col-lg-4">
                                     <div class="product-item">
                                         <div class="product-image">
-                                            <img src="{{ asset('storage/' . $product->image) }}"
+                                            <img src="{{ minioUrl($product->image) }}"
                                                 alt="{{ $product->product_name }}" class="img-fluid">
                                             <div class="product-action">
                                                 <form action="{{ route('cart.addItem') }}" method="POST" class="d-inline">

@@ -8,7 +8,7 @@
                     <div class="category-card">
                         <div class="category-image">
                             <a href="{{ route('product.category', ['id' => $category->id]) }}">
-                                <img src="{{ asset('storage/' . $category->image) }}" alt="Category Name" />
+                                <img src="{{ minioUrl($category->image) }}" alt="Category Name" />
                             </a>
                         </div>
                         <div class="category-info">

@@ -47,7 +47,7 @@
                                 <label>Image</label>
                                 <div>
                                     @if (isset($product->image) && $product->image)
-                                        <img src="{{ asset('storage/' . $product->image) }}" alt="Image"
+                                        <img src="{{ minioUrl($product->image) }}" alt="Image"
                                             style="max-width: 100px; max-height: 100px;">
                                     @endif
                                 </div>
@@ -170,7 +170,7 @@
                                                     <label>Image</label>
                                                     @if (isset($variant->image) && $variant->image)
                                                         <div>
-                                                            <img src="{{ asset('storage/' . $variant->image) }}"
+                                                            <img src="{{ minioUrl($variant->image) }}"
                                                                 alt="Variant Image"
                                                                 style="max-width: 50px; max-height: 50px;">
                                                         </div>

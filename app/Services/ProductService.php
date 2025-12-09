@@ -64,7 +64,7 @@ class ProductService
             ];
 
             if (isset($data['image']) && $data['image']->isValid()) {
-                $imagePath = $data['image']->store('products', 'public');
+                $imagePath = $data['image']->store('products', 'minio');
                 $productData['image'] = $imagePath;
                 $storageFiles[] = $imagePath;
             }
@@ -81,7 +81,7 @@ class ProductService
                     ];
 
                     if (isset($variant['image']) && $variant['image']->isValid()) {
-                        $variantImagePath = $variant['image']->store('product_variants', 'public');
+                        $variantImagePath = $variant['image']->store('product_variants', 'minio');
                         $variantData['image'] = $variantImagePath;
                         $storageFiles[] = $variantImagePath;
                     }
@@ -121,7 +121,7 @@ class ProductService
             if (!empty($storageFiles)) {
                 foreach ($storageFiles as $filePath) {
                     try {
-                        Storage::disk('public')->delete($filePath);
+                        Storage::disk('minio')->delete($filePath);
                     } catch (\Throwable $th) {
                         throw new \Exception("Failed to delete storage file: " . $th->getMessage());
                     }
@@ -162,10 +162,10 @@ class ProductService
             if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
                 if ($data['image']->isValid()) {
                     if ($product->image) {
-                        Storage::disk('public')->delete($product->image);
+                        Storage::disk('minio')->delete($product->image);
                     }
 
-                    $imagePath = $data['image']->store('products', 'public');
+                    $imagePath = $data['image']->store('products', 'minio');
                     $updateData['image'] = $imagePath;
                     $storageFiles[] = $imagePath;
                 }
@@ -191,11 +191,11 @@ class ProductService
                             if (isset($variant['id'])) {
                                 $existingVariant = $this->productVariantRepository->getById($variant['id']);
                                 if ($existingVariant && $existingVariant->image) {
-                                    Storage::disk('public')->delete($existingVariant->image);
+                                    Storage::disk('minio')->delete($existingVariant->image);
                                 }
                             }
 
-                            $variantImagePath = $variant['image']->store('product_variants', 'public');
+                            $variantImagePath = $variant['image']->store('product_variants', 'minio');
                             $variantData['image'] = $variantImagePath;
                             $storageFiles[] = $variantImagePath;
                         }
@@ -240,7 +240,7 @@ class ProductService
                 foreach ($variantsToDelete as $variantId) {
                     $variantToDelete = $this->productVariantRepository->getById($variantId);
                     if ($variantToDelete && $variantToDelete->image) {
-                        Storage::disk('public')->delete($variantToDelete->image);
+                        Storage::disk('minio')->delete($variantToDelete->image);
                     }
                     $this->productVariantRepository->delete($variantId);
                 }
@@ -258,7 +258,7 @@ class ProductService
             if (!empty($storageFiles)) {
                 foreach ($storageFiles as $filePath) {
                     try {
-                        Storage::disk('public')->delete($filePath);
+                        Storage::disk('minio')->delete($filePath);
                     } catch (\Throwable $th) {
                         throw new \Exception("Failed to delete storage file: ");
                     }

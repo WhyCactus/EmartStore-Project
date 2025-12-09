@@ -38,7 +38,7 @@
                                     <td>{{ $category->id }}</td>
                                     <td>{{ $category->category_name }}</td>
                                     <td>
-                                        <img src="{{ asset('storage/' . $category->image) }}" alt="Category Name"
+                                        <img src="{{ minioUrl($category->image) }}" alt="Category Name"
                                             style="width: 100px; height: 100px;" />
                                     </td>
                                     <td>{{ $category->status }}</td>

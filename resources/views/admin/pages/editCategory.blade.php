@@ -18,7 +18,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.category.update-category', $category->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.category.update-category', $category->id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="row">
@@ -34,7 +35,7 @@
                                 <label>Image</label>
                                 <div>
                                     @if (isset($category->image) && $category->image)
-                                        <img src="{{ asset('storage/' . $category->image) }}" alt="Category Image"
+                                        <img src="{{ minioUrl($category->image) }}" alt="Category Image"
                                             style="max-width: 100px; max-height: 100px;">
                                     @endif
                                 </div>

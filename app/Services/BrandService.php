@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constants\CommonStatus;
 use App\Repositories\BrandRepository;
 
 class BrandService
@@ -27,7 +28,7 @@ class BrandService
     {
         $brandData = [
             'brand_name' => $data['brand_name'],
-            'status' => 'active',
+            'status' => CommonStatus::ACTIVE,
         ];
 
         return $this->brandRepository->create($brandData);

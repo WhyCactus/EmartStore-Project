@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Constants\DeliveryMethod;
+use App\Constants\PaymentMethod;
 use App\Constants\PaymentStatus;
 use App\Mail\PurchaseSuccessNotification;
 use App\Repositories\CartRepositoryInterface;
@@ -103,7 +104,7 @@ class CheckOutService
                 'cart_id' => $cart->id,
             ]);
 
-            if ($checkOutData['payment_method'] === 'cash') {
+            if ($checkOutData['payment_method'] === PaymentMethod::CASH) {
                 $this->cartRepository->clearCart($cart->id);
 
                 $order->load(['user', 'orderDetails', 'orderShipping']);

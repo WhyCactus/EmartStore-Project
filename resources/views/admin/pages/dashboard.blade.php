@@ -39,7 +39,6 @@
                             <div>
                                 <p class="text-muted mb-1 fw-medium">Total Products</p>
                                 <h3 class="mb-0 fw-bold">{{ number_format($totalProducts) }}</h3>
-                                <small class="text-info"><i class="fas fa-box"></i> In stock</small>
                             </div>
                             <div class="stats-icon bg-warning bg-gradient text-white">
                                 <i class="fas fa-box-open"></i>
