@@ -94,7 +94,7 @@
                                 <h3>Cart Summary</h3>
                                 <?php
                                 $subtotal = $cart->items->sum('total_price');
-                                $shippingCost = 1;
+                                $shippingCost = 15;
                                 $grandTotal = $subtotal + $shippingCost;
                                 ?>
                                 <p>Sub Total<span class="subtotal-amount">${{ number_format($subtotal, 2) }}</span></p>

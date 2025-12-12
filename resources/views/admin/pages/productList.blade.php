@@ -45,7 +45,7 @@
                                     <td>{{ $product->sku }}</td>
                                     <td>{{ $product->product_name }}</td>
                                     <td>
-                                        <img src="{{ minioUrl($product->image) }}" alt="" width="50px"
+                                        <img src="{{ $product->image }}" alt="Null" width="50px"
                                             height="50px">
                                     </td>
                                     <td>

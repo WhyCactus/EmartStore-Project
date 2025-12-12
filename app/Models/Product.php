@@ -53,6 +53,16 @@ class Product extends Model
         return $this->hasMany(ProductReview::class);
     }
 
+    public function getImageUrlAttribute(): ?string
+    {
+        if ($this->image) {
+            return $this->image;
+        }
+
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+    }
 
     // Accessor for reviews count
     public function getReviewsCountAttribute(): int

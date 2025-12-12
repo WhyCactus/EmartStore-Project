@@ -6,4 +6,5 @@ return [
     App\Providers\EventServiceProvider::class,
     App\Providers\RepositoryServiceProvider::class,
     App\Providers\ScheduleServiceProvider::class,
+    App\Providers\FirebaseServiceProvider::class,
 ];

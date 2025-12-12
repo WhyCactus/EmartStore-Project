@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Constants\CommonStatus;
 use App\Models\Attribute;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProductVariantRepository;
@@ -13,11 +14,16 @@ class ProductService
 {
     protected $productRepository;
     protected $productVariantRepository;
+    protected $firebaseService;
 
-    public function __construct(ProductRepository $productRepository, ProductVariantRepository $productVariantRepository)
-    {
+    public function __construct(
+        ProductRepository $productRepository,
+        ProductVariantRepository $productVariantRepository,
+        FirebaseStorageService $firebaseService
+    ) {
         $this->productRepository = $productRepository;
         $this->productVariantRepository = $productVariantRepository;
+        $this->firebaseService = $firebaseService;
     }
 
     public function getAllProductsWithRelations($relations = ['brand', 'category'])
@@ -59,14 +65,13 @@ class ProductService
                 'description' => $data['description'] ?? null,
                 'category_id' => $data['category_id'],
                 'brand_id' => $data['brand_id'],
-                'status' => 'active',
+                'status' => CommonStatus::ACTIVE,
                 'sold_count' => 0,
             ];
 
-            if (isset($data['image']) && $data['image']->isValid()) {
-                $imagePath = $data['image']->store('products', 'minio');
-                $productData['image'] = $imagePath;
-                $storageFiles[] = $imagePath;
+            if (isset($data['image']) && $data['image'] instanceof UploadedFile && $data['image']->isValid()) {
+                $uploadResult = $this->firebaseService->uploadProductImage($data['image']);
+                $productData['image'] = $uploadResult['url'];
             }
 
             $product = $this->productRepository->create($productData);
@@ -80,10 +85,9 @@ class ProductService
                         'quantity_in_stock' => $variant['quantity_in_stock'],
                     ];
 
-                    if (isset($variant['image']) && $variant['image']->isValid()) {
-                        $variantImagePath = $variant['image']->store('product_variants', 'minio');
-                        $variantData['image'] = $variantImagePath;
-                        $storageFiles[] = $variantImagePath;
+                    if (isset($variant['image']) && $variant['image'] instanceof UploadedFile && $variant['image']->isValid()) {
+                        $uploadResult = $this->firebaseService->uploadVarnishImage($variant['image']);
+                        $variantData['image'] = $uploadResult['url'];
                     }
 
                     $createdVariant = $this->productVariantRepository->create($variantData);
@@ -159,16 +163,16 @@ class ProductService
                 'brand_id' => $data['brand_id'],
             ];
 
-            if (isset($data['image']) && $data['image'] instanceof UploadedFile) {
-                if ($data['image']->isValid()) {
-                    if ($product->image) {
-                        Storage::disk('minio')->delete($product->image);
+            if (isset($data['image']) && $data['image'] instanceof UploadedFile && $data['image']->isValid()) {
+                if ($product->image) {
+                    $oldPath = $this->extractPathFromUrl($product->image);
+                    if ($oldPath) {
+                        $this->firebaseService->delete($oldPath);
                     }
-
-                    $imagePath = $data['image']->store('products', 'minio');
-                    $updateData['image'] = $imagePath;
-                    $storageFiles[] = $imagePath;
                 }
+
+                $uploadResult = $this->firebaseService->uploadProductImage($data['image']);
+                $updateData['image'] = $uploadResult['url'];
             }
 
             $this->productRepository->update($id, $updateData);
@@ -274,13 +278,19 @@ class ProductService
             $product = $this->productRepository->getById($id);
 
             if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+                $path = $this->extractPathFromUrl($product->image);
+                if ($path) {
+                    $this->firebaseService->delete($path);
+                }
             }
 
             if ($product->productVariants) {
                 foreach ($product->productVariants as $variant) {
                     if ($variant->image) {
-                        Storage::disk('public')->delete($variant->image);
+                        $path = $this->extractPathFromUrl($variant->image);
+                        if ($path) {
+                            $this->firebaseService->delete($path);
+                        }
                     }
                     $this->productVariantRepository->delete($variant->id);
                 }
@@ -304,5 +314,13 @@ class ProductService
         } catch (\Throwable $e) {
             throw new \Exception("Failed to get related products: " . $e->getMessage());
         }
+    }
+
+    private function extractPathFromUrl($url)
+    {
+        if (preg_match('/https:\/\/storage\.googleapis\.com\/[^\/]+\/(.+)/', $url, $matches)) {
+            return urldecode($matches[1]);
+        }
+        return null;
     }
 }
