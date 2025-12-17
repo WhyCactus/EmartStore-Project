@@ -14,6 +14,7 @@ Route::middleware(['auth', 'role'])->group(function () {
     //USER
     Route::get('/users', [AdminUserController::class, 'index'])->name('users');
     Route::put('/user/{id}', [AdminUserController::class, 'toggleStatus'])->name('toggle-status');
+    Route::post('user-import', [AdminUserController::class, 'import'])->name('user-import');
 
     //PRODUCT
     Route::prefix('product')->name('product.')->group(function () {

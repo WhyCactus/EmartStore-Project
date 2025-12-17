@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Services\UserService;
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminUserController extends Controller
 {
@@ -29,9 +32,26 @@ class AdminUserController extends Controller
     {
         try {
             $this->userService->changeStatus($id);
-            return redirect()->back()->with('success','Change Status Success');
+            return redirect()->back()->with('success', 'Change Status Success');
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Server Error' . $e->getMessage());
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $request->validate([
+                'file' => 'required|file|extensions:csv,xlsx,xls|max:5120',
+            ]);
+
+            Excel::import(new UsersImport(), $request->file('file'));
+
+            return back()->with('success', 'Users imported successfully!');
+        } catch (\Throwable $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error importing users: ' . $e->getMessage());
         }
     }
 }

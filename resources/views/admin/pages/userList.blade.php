@@ -10,15 +10,25 @@
                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                 <li class="breadcrumb-item active">Users</li>
             </ol>
+            <div>
+                <form action="{{ route('admin.user-import') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row g-3 align-items-center mt-2 mb-2">
+                        <div class="col-auto">
+                            <input type="file" name="file" class="form-control">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">Import Users</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
                     Users
                 </div>
                 <div class="card-body">
-                    <div class="">
-                        
-                    </div>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
