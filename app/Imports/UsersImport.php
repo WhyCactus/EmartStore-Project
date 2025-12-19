@@ -16,14 +16,14 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation
      */
     public function model(array $row)
     {
-        return new User([
-            'username' => $row['username'] ?? null,
-            'email' => $row['email'] ?? null,
-            'password' => bcrypt($row['password'] ?? 'password123'),
-            'phone' => $row['phone'] ?? null,
-            'status' => $row['status'] ?? 'active',
-            'role_id' => $row['role_id'] ?? 3,
-        ]);
+        return User::updateOrCreate(
+            ['email' => $row['email']],
+            [
+                'username' => $row['username'],
+                'phone' => $row['phone'],
+                'password' => bcrypt($row['password'] ?? '123456789'),
+            ]
+        );
     }
 
     public function rules(): array
