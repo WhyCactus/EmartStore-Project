@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Constants\CommonStatus;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserRepository
 {
@@ -94,5 +95,29 @@ class UserRepository
     public function getTotalUsersCount(): int
     {
         return $this->model->where('status', CommonStatus::ACTIVE)->count();
+    }
+
+    public function create(array $data)
+    {
+        return $this->model->create($data);
+    }
+
+    public function updateUser($id, array $data)
+    {
+        $user = $this->getById($id);
+        $user->update($data);
+        return $user;
+    }
+
+    public function getRoles()
+    {
+        return Role::pluck('name', 'name')->all();
+    }
+
+    public function assignRole($id, array $data)
+    {
+        $user = $this->getById($id);
+        $user->syncRoles($data);
+        return $user;
     }
 }

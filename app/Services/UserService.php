@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\UserRepository;
 
 class UserService
@@ -51,5 +52,36 @@ class UserService
     public function changeStatus($id)
     {
         return $this->userRepository->toggleUserStatus($id);
+    }
+
+    public function createUser(array $data)
+    {
+        $userData = [
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'phone' => $data['phone'],
+            'status' => 'active',
+        ];
+
+        $userData = User::create($userData);
+        $userData->assignRole($data['role']);
+
+        return $userData;
+    }
+
+    public function getAllRoles()
+    {
+        return $this->userRepository->getRoles();
+    }
+
+    public function updateAdminUser($id, array $data)
+    {
+        return $this->userRepository->updateUser($id, $data);
+    }
+
+    public function assignRoleToUser($id, array $data)
+    {
+        return $this->userRepository->assignRole($id, $data);
     }
 }

@@ -44,9 +44,9 @@
                                 data-toggle="dropdown">{{ Auth::user()->username }}</a>
                             <div class="dropdown-menu">
                                 <a href="{{ route('my-account.orders') }}" class="dropdown-item">My Account</a>
-                                @if (Auth::user()->role_id == 1)
-                                    <a href="/admin/dashboard" class="dropdown-item">Dashboard</a>
-                                @endif
+                                @role('admin|staff')
+                                    <a href="{{ route('admin.dashboard') }}" class="dropdown-item">Dashboard</a>
+                                @endrole
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
                                     <button type="submit" class="dropdown-item">Logout</button>

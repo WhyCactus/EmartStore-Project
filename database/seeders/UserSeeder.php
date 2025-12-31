@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -14,41 +17,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->delete();
-
-        $users = [
-            [
-                'username' => 'admin',
-                'email' => 'admin@emart.com',
-                'password' => Hash::make('123456789'),
-                'phone' => '0123456789',
-                'status' => 'active',
-                'role_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'username' => 'user',
-                'email' => 'user@gmail.com',
-                'password' => Hash::make('123456789'),
-                'phone' => '0123456789',
-                'status' => 'active',
-                'role_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'username' => 'jane doe',
-                'email' => 'jane@emart.com',
-                'password' => Hash::make('123456789'),
-                'phone' => '0123456789',
-                'status' => 'active',
-                'role_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ];
-
-        DB::table('users')->insert($users);
+        User::create([
+            'username' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('123456789'),
+            'phone' => '0123456789',
+            'status' => 'active',
+        ]);
     }
 }

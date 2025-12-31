@@ -24,9 +24,15 @@
                 </form>
             </div>
             <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Users
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-table me-1"></i>
+                        Users
+                    </div>
+                    <a href="{{ route('admin.create-user') }}" class="btn btn-success">
+                        <i class="bi bi-plus-circle"></i>
+                        New User
+                    </a>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered">
@@ -36,7 +42,6 @@
                                 <th>Username</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Role</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -48,22 +53,27 @@
                                     <td>{{ $user->username }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>{{ $user->phone }}</td>
-                                    <td>{{ $user->role->name }}</td>
                                     <td>{{ $user->status }}</td>
                                     <td>
-                                        <form action="{{ route('admin.toggle-status', $user->id) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            @if ($user->status == 'active')
-                                                <button type="submit" class="btn btn-outline-danger">
-                                                    <i class="bi bi-dash-circle"></i>
-                                                </button>
-                                            @elseif ($user->status == 'inactive')
-                                                <button type="submit" class="btn btn-outline-success">
-                                                    <i class="bi bi-plus-circle"></i>
-                                                </button>
-                                            @endif
-                                        </form>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ route('admin.edit-user', $user->id) }}"
+                                                class="btn btn-outline-primary">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <form action="{{ route('admin.toggle-status', $user->id) }}" method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                @if ($user->status == 'active')
+                                                    <button type="submit" class="btn btn-outline-danger">
+                                                        <i class="bi bi-dash-circle"></i>
+                                                    </button>
+                                                @elseif ($user->status == 'inactive')
+                                                    <button type="submit" class="btn btn-outline-success">
+                                                        <i class="bi bi-plus-circle"></i>
+                                                    </button>
+                                                @endif
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

@@ -19,7 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'role' => App\Http\Middleware\CheckRole::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'regular.user' => App\Http\Middleware\RegularUserMiddleware::class
         ]);
 
@@ -28,10 +30,10 @@ return Application::configure(basePath: dirname(__DIR__))
             // 'user.active',
         ]);
 
-        $middleware->group('admin', [
-            'auth',
-            'role', // check role admin
-        ]);
+        // $middleware->group('admin', [
+        //     'auth',
+        //     'role', // check role admin
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
