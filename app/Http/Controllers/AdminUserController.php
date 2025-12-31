@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
 use App\Http\Requests\CreateUserRequest;
 use App\Imports\UsersImport;
 use App\Services\UserService;
@@ -54,6 +55,17 @@ class AdminUserController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Error importing users: ' . $e->getMessage());
+        }
+    }
+
+    public function export()
+    {
+        try {
+            return Excel::download(new UserExport(), 'users.xlsx');
+        } catch (\Throwable $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Error exporting users: ' . $e->getMessage());
         }
     }
 

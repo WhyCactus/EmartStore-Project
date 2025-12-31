@@ -15,6 +15,7 @@ Route::group(['middleware' => ['role:admin|staff']], function () {
     Route::group(['middleware' => ['can:user']], function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users');
         Route::put('/user/{id}', [AdminUserController::class, 'toggleStatus'])->name('toggle-status');
+        Route::get('user-export', [AdminUserController::class, 'export'])->name('user-export');
         Route::post('user-import', [AdminUserController::class, 'import'])->name('user-import');
         Route::get('/create-user', [AdminUserController::class, 'create'])->name('create-user');
         Route::post('/create-user', [AdminUserController::class, 'store'])->name('store-user');

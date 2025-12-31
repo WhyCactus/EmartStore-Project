@@ -20,6 +20,9 @@
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary">Import Users</button>
                         </div>
+                        <div class="col-auto">
+                            <a href="{{ route('admin.user-export') }}" class="btn btn-success">Export Users</a>
+                        </div>
                     </div>
                 </form>
             </div>
