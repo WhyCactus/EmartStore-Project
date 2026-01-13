@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminBrandController;
 use App\Http\Controllers\AdminCategoryController;
+use App\Http\Controllers\AdminChatController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminUserController;
@@ -72,4 +73,7 @@ Route::group(['middleware' => ['role:admin|staff']], function () {
             Route::delete('/delete-role/{id}', [RoleController::class, 'destroy'])->name('delete-role');
         });
     });
+
+    Route::get('/chat', [AdminChatController::class, 'index'])->name('chat');
+    Route::post('/chat/send', [AdminChatController::class, 'sendMessage'])->name('chat-send');
 });

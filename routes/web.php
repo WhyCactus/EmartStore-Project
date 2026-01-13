@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\ClientChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
@@ -61,45 +62,8 @@ Route::middleware('regular.user')->group(function () {
     Route::get('/stripe', [StripePaymentController::class, 'showStripe'])->name('stripe');
     Route::post('/stripe', [StripePaymentController::class, 'processPayment'])->name('stripe.process');
     Route::get('/checkout/success/{orderCode}', [CheckOutController::class, 'checkoutSuccess'])->name('checkout.success');
+
+    Route::get('/chat', [ClientChatController::class, 'index'])->name('chat');
+    Route::get('/messages', [ClientChatController::class, 'getMessages'])->name('messages.index');
+    Route::post('/messages', [ClientChatController::class, 'sendMessage'])->name('messages.store');
 });
-
-// Test Mail Routes (Chỉ dùng trong môi trường dev)
-if (config('app.env') === 'local') {
-    Route::prefix('test-mail')->group(function () {
-        Route::get('/stripe-warning', function () {
-            $order = \App\Models\Order::where('payment_method', 'stripe')
-                ->where('payment_status', 'pending')
-                ->first();
-
-            if (!$order) {
-                return 'Không tìm thấy đơn hàng Stripe pending nào. Vui lòng tạo đơn hàng test trước.';
-            }
-
-            return new \App\Mail\SendStripePaymentWarnings($order, 5);
-        })->name('test.mail.stripe.warning');
-
-        Route::get('/stripe-expired', function () {
-            $order = \App\Models\Order::where('payment_method', 'stripe')
-                ->where('payment_status', 'pending')
-                ->first();
-
-            if (!$order) {
-                return 'Không tìm thấy đơn hàng Stripe pending nào. Vui lòng tạo đơn hàng test trước.';
-            }
-
-            return new \App\Mail\SendExpiredStripePayment($order);
-        })->name('test.mail.stripe.expired');
-
-        Route::get('/send-stripe-warning/{orderId}', function ($orderId) {
-            $order = \App\Models\Order::findOrFail($orderId);
-            \Mail::to($order->user->email)->send(new \App\Mail\SendStripePaymentWarnings($order, 5));
-            return 'Email cảnh báo đã được gửi đến: ' . $order->user->email;
-        });
-
-        Route::get('/send-stripe-expired/{orderId}', function ($orderId) {
-            $order = \App\Models\Order::findOrFail($orderId);
-            \Mail::to($order->user->email)->send(new \App\Mail\SendExpiredStripePayment($order));
-            return 'Email hết hạn đã được gửi đến: ' . $order->user->email;
-        });
-    });
-}

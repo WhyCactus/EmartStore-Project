@@ -50,6 +50,11 @@
                         Roles
                     </a>
                 @endcan
+
+                <a href="{{ route('admin.chat') }}" class="nav-link">
+                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                    Chat
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">

@@ -23,6 +23,9 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <!-- Additional Styles -->
+    @stack('styles')
 </head>
 
 <body>
@@ -40,6 +43,9 @@
 
     <!-- Scripts -->
     @include('client.layouts.scripts')
+
+    <!-- Additional Scripts -->
+    @stack('scripts')
 </body>
 
 </html>

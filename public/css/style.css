@@ -164,6 +164,16 @@ button.btn {
     border-radius: 0;
 }
 
+.top-header .user .contact {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.top-header .user .contact i {
+    color: #3F69AA;
+    font-size: 24px;
+}
+
 .top-header .user .cart {
     display: inline-block;
     margin: 0 5px;

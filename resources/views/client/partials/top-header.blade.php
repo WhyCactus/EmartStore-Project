@@ -18,6 +18,11 @@
             <div class="col-md-3">
                 <div class="user">
                     @auth()
+                        <div class="contact">
+                            <a href="{{ route('chat') }}">
+                                <i class="fa fa-phone"></i>
+                            </a>
+                        </div>
                         <div class="bell">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="notificationBell">
                                 <i class="fa fa-bell"></i>
